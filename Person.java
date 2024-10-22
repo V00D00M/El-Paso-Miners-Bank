@@ -1,15 +1,10 @@
-import java.util.List;
-import java.util.ArrayList;
-
 public abstract class Person {
     private String name;
     private String address;
-    private List<Account> accounts;
 
     public Person(String name, String address) {
         this.name = name;
         this.address = address;
-        this.accounts = new ArrayList<>();
     }
 
     public Account getAccount(String accountNumber) {

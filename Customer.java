@@ -1,37 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Customer extends Person {
-    private String customerID;
+    private List<Account> accounts;
+    
 
-
-public class Customer {
-    protected String customerID;
-    protected List<Account> account;
-
-    public Customer(String customerID) {
-        this.customerID = customerID;
-        ArrayList<Account> account = new ArrayList<Account>();
-    }
-
-    public void addAccount(Account newAccount){
-        this.account.add(newAccount);
-        return;
-    }
-    public void removeAccount(Account accRemove){
-        for(int i = 0; i < this.account.size(); i++){
-            if(accRemove == this.account.get(i)){
-                this.account.remove(i);
-            }
-        }
-    }
-    public Account getAccount(int accountNumber){
-        Account temp;
-        if (this.account.size() == 0){
-            throw new IllegalArgumentException("We do not recognize this account number, please try again");
-        }
-        for(int i = 0; i < this.account.size(); i++){
-            if(account.get(i).getAccountNumber() == accountNumber){
-                temp = this.account.get(i);
-            }
-        }
-        return temp;
+    public Customer(String customerID, String name, String address) {
+        super(name, address);
+        this.accounts = accounts;
     }
 }
