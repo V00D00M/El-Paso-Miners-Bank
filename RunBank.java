@@ -1,6 +1,5 @@
 import java.util.Scanner;
 
-
 // main method of entire project goes here
 public class RunBank {
     public static void main (String args[]) {
