@@ -1,7 +1,7 @@
 public class Checking extends Account {
     private double overdraftLimit;
     
-    public Checking(String accountNumber, double balance, double overdraftLimit) {
+    public Checking(int accountNumber, double balance, double overdraftLimit) {
         super(accountNumber, balance);
         this.overdraftLimit = overdraftLimit;
     }

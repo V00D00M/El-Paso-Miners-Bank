@@ -1,10 +1,10 @@
 public abstract class Account {
     // Account class is abstract, so it cannot be instantiated
-    protected String accountNumber;
+    protected int accountNumber;
     protected double balance;
 
     // Constructor
-    public Account(String accountNumber, double balance) {
+    public Account(int accountNumber, double balance) {
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
@@ -18,7 +18,7 @@ public abstract class Account {
         return balance;
     }
 
-    public String getAccountNumber() {
+    public int getAccountNumber() {
         return accountNumber;
     }
 }
