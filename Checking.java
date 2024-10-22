@@ -15,7 +15,7 @@ public class Checking extends Account {
             balance -= amount;
         }
         else {
-            System.out.println("Insufficient funds");
+            System.out.println("Insufficient funds to withdraw $" + amount);
         }
     }
     
