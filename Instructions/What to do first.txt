@@ -1,2 +1,0 @@
-We should start working on the UML diagrams so we can get a good idea on how to layout the classes
-as well as having a decent starting point to show the TA on Thursday

@@ -1,0 +1,23 @@
+Use Case Scenario 1: Withdrawing Money
+--------------------------------------
+1. The customer logs into their bank account.
+2. The customer chooses to withdraw money from their account.
+3. The system prompts the customer to select the account to withdraw from.
+4. The customer selects the account and enters the amount to be withdrawn.
+5. The system verifies the available balance in the selected account.
+6. The customer confirms the withdrawal details and submits the request.
+7. The system processes the withdrawal and updates the balance of the account.
+8. The system sends a confirmation notification to the customer via email or SMS.
+9. The customer receives the notification and verifies the withdrawal in their account history.
+
+Use Case Scenario 2: Funds Transfer Between Accounts
+-----------------------------------------------------
+1. The customer logs into their bank account.
+2. The customer navigates to the "Transfer Funds" section.
+3. The system prompts the customer to select the source account and the destination account.
+4. The customer selects the accounts and enters the amount to be transferred.
+5. The system verifies the available balance in the source account.
+6. The customer confirms the transfer details and submits the request.
+7. The system processes the transfer and updates the balances of both accounts.
+8. The system sends a confirmation notification to the customer via email or SMS.
+9. The customer receives the notification and verifies the transfer in their account history.
