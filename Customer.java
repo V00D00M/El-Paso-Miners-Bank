@@ -1,13 +1,8 @@
-import java.util.List;
-import java.util.ArrayList;
+public class Customer extends Person {
+    private String customerID;
 
-
-public class Customer {
-    protected String customerID;
-    protected List<Account> accounts;
-
-    public Customer(String customerID) {
-        this.customerID = customerID;
+    public Customer(String name,String customerID) {
+        super(name);
         this.accounts = new ArrayList<>();
     }
 

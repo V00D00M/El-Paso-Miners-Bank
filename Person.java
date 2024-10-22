@@ -1,6 +1,10 @@
+import java.util.List;
+import java.util.ArrayList;
+
 public class Person {
-    protected String name;
-    protected String address;
+    private String name;
+    private String address;
+    private List<Account> accounts;
 
     public Person(String name, String address) {
         this.name = name;
