@@ -1,11 +1,15 @@
-public class Person {
-    protected String name;
-    protected String address;
+import java.util.List;
+
+public abstract class Person {
+    private String name;
+    private String address;
+    private static CSVReader csvReader;
+    private List<Account> accounts;
 
     public Person(String name, String address) {
         this.name = name;
         this.address = address;
-        this.accounts = new ArrayList<>();
+        Person.csvReader = csvReader;
     }
 
     public Account getAccount(String accountNumber) {
@@ -17,8 +21,18 @@ public class Person {
         return null;
     }
 
-    public String getName() {
-        return name;
+    public String[] findUserByName(String firstName, String lastName) {
+        String key = firstName + " " + lastName;
+        return userMapByName.get(key);
+    }
+
+    public String[] findUserByID(String id) {
+        //return userMapByID.get(id);
+        return null;
+    }
+
+    public static boolean login(String name) {
+        String[] user = CSVReader.findUserByName(name);
     }
 
     public String getAddress() {
@@ -28,5 +42,4 @@ public class Person {
     public List<Account> getAccounts() {
         return accounts;
     }
-
 }
