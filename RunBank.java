@@ -11,17 +11,11 @@ public class RunBank {
         CSVReader reader;
 
         try {
-            reader = CSVReader.getInstance("users.csv");
+            reader = CSVReader.getInstance("CS 3331 - Bank Users.csv");
+            List<String[]> users = reader.getAllUsers();
         } catch (IOException e) {
             System.out.println("Error reading users.csv file.");
             return;
-        }
-
-        List<String[]> allUsers = reader.getAllUsers();
-        for (String[] user : reader.getAllUsers()) {
-            for (String field : user) {
-                System.out.print(field + ",");
-            }
         }
 
         //Start of the program

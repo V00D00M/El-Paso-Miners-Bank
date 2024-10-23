@@ -1,6 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,22 +16,28 @@ public class CSVReader {
 
     public CSVReader(String filePath) throws IOException {
         // Read the CSV file and store the data in a map
-        List<String> lines = Files.readAllLines(Paths.get(filePath));
-        for (String line : lines) {
-            String[] fields = parseCSVLine(line);
-            if (fields.length > 1) {
-                String key = fields[1] + " " + fields[2];
-                userMapByName.put(key, fields);
-                allUsers.add(fields); // Add the user to the list of all users
-            }
-        }
+        readCSVFile(filePath);
     }
 
+    // Read the CSV file and store the data in a map
     public static CSVReader getInstance(String filePath) throws IOException {
         if (instance == null) {
             instance = new CSVReader(filePath);
         }
         return instance;
+    }
+
+    private void readCSVFile(String filePath) throws IOException {
+        String line;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            br.readLine(); // Skip header line
+            while ((line = br.readLine()) != null) {
+                String[] values = parseCSVLine(line);
+                allUsers.add(values);
+                userMapByName.put(values[1] + " " + values[2], values);
+            }
+        }
     }
 
     // Parse a line of CSV data into an array of fields
@@ -59,16 +66,6 @@ public class CSVReader {
         return allUsers;
     }
 
-    public String[] findUserByName(String firstName, String lastName) {
-        String key = firstName + " " + lastName;
-        return userMapByName.get(key);
-    }
-
-    public String[] findUserByID(String id) {
-        //return userMapByID.get(id);
-        return null;
-    }
-
     // Getter methods to access individual fields by their index
     public String getField(int index) {
         if (userFields != null && index >= 0 && index < userFields.length) {
@@ -91,4 +88,17 @@ public class CSVReader {
     public String getCreditAccountNumber() { return getField(10); }
     public String getCreditMax() { return getField(11); }
     public String getCreditStartingBalance() { return getField(12); }
+
+    public static void main(String[] args) {
+        try {
+            CSVReader reader = CSVReader.getInstance("CS 3331 - Bank Users.csv");
+            List<String[]> users = reader.getAllUsers();
+            // Example usage
+            for (String[] user : users) {
+                System.out.println(user[5]); // Print first and last name
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

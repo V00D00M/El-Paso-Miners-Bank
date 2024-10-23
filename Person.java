@@ -21,6 +21,16 @@ public abstract class Person {
         return null;
     }
 
+    public String[] findUserByName(String firstName, String lastName) {
+        String key = firstName + " " + lastName;
+        return userMapByName.get(key);
+    }
+
+    public String[] findUserByID(String id) {
+        //return userMapByID.get(id);
+        return null;
+    }
+
     public static boolean login(String name) {
         String[] user = CSVReader.findUserByName(name);
     }
