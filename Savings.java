@@ -1,5 +1,5 @@
 public class Savings extends Account {
-    public Savings(int accountNumber, double balance) {
+    public Savings(String accountNumber, double balance) {
         super(accountNumber, balance);
     }
 
