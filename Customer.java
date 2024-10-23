@@ -21,4 +21,12 @@ public class Customer extends Person {
         }
         throw new IllegalArgumentException("We do not recognize this account number, please try again"); // Throw exception if not found
     }
+    //Not complete transfer function
+    /*public void Transfer(double transferAmt, int accountNumber){
+        if(customer.getbalance() < transferAmt){
+            System.out.println("Insufficient funds to transfer $" + transferAmt);
+        } else {
+            customer.getbalance() -= transferAmt;
+        }
+    }*/
 }

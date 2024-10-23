@@ -1,9 +1,9 @@
 public class Checking extends Account {
-    private double overdraftLimit;
+    // private double overdraftLimit;
     
-    public Checking(int accountNumber, double balance, double overdraftLimit) {
+    public Checking(int accountNumber, double balance/*, double overdraftLimit*/) {
         super(accountNumber, balance);
-        this.overdraftLimit = overdraftLimit;
+        // this.overdraftLimit = overdraftLimit;
     }
     
     public void deposit(double amount) {
@@ -11,7 +11,7 @@ public class Checking extends Account {
     }
     
     public void withdraw(double amount) {
-        if (balance - amount >= overdraftLimit) {
+        if (balance > amount/*balance - amount >= overdraftLimit*/) {
             balance -= amount;
         }
         else {
@@ -19,8 +19,10 @@ public class Checking extends Account {
         }
     }
     
-    public double getOverdraftLimit() {
+    
+    /*public double getOverdraftLimit() {
         return overdraftLimit;
-    }
+    }*/
+
     
 }
