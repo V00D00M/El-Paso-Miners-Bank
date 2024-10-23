@@ -3,6 +3,8 @@ import java.util.List;
 public abstract class Person {
     private String name;
     private String address;
+    private String DOB;
+    private String phoneNumber;
     private static CSVReader csvReader;
     private List<Account> accounts;
 
@@ -32,7 +34,7 @@ public abstract class Person {
     }
 
     public static boolean login(String name) {
-        String[] user = CSVReader.findUserByName(name);
+        String[] user = CSVReader.getName(name);
     }
 
     public String getAddress() {

@@ -76,8 +76,7 @@ public class CSVReader {
 
     // Specific getters for commonly accessed fields
     public String getIdentificationNumber() { return getField(0); }
-    public String getFirstName() { return getField(1); }
-    public String getLastName() { return getField(2); }
+    public String getName() { return getField(1) + " " + getField(2); }
     public String getDateOfBirth() { return getField(3); }
     public String getAddress() { return getField(4); }
     public String getPhoneNumber() { return getField(5); }

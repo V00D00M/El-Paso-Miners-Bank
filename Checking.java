@@ -1,9 +1,7 @@
 public class Checking extends Account {
-    private double overdraftLimit;
     
-    public Checking(String accountNumber, double balance, double overdraftLimit) {
+    public Checking(String accountNumber, double balance) {
         super(accountNumber, balance);
-        this.overdraftLimit = overdraftLimit;
     }
     
     public void deposit(double amount) {
@@ -11,16 +9,11 @@ public class Checking extends Account {
     }
     
     public void withdraw(double amount) {
-        if (balance - amount >= overdraftLimit) {
+        if (balance > amount) {
             balance -= amount;
         }
         else {
             System.out.println("Insufficient funds to withdraw $" + amount);
         }
-    }
-    
-    public double getOverdraftLimit() {
-        return overdraftLimit;
-    }
-    
+    }    
 }

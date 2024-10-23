@@ -74,20 +74,6 @@ public class RunBank {
                 sc.close();
             }
         }
-
-        // public static boolean Login(String name) {
-        //     boolean userFields = false;
-        //     do {
-        //         System.out.println("Please enter your first and last name: ");
-        //         String name = sc.next();
-        //         userFields = reader.findUserByName(name);
-        //         if (userFields == false) {
-        //             System.out.println("User not found. Please try again.");
-        //         }
-        //     }
-        //     while (userFields == false);
-        //     return userFields;
-        // }
     }
 }
 

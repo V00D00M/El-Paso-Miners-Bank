@@ -3,7 +3,6 @@ import java.util.List;
 
 public class Customer extends Person {
     protected String customerID;
-    protected List<Account> account;
 
     public Customer(String customerID) {
         this.customerID = customerID;
