@@ -88,17 +88,4 @@ public class CSVReader {
     public String getCreditAccountNumber() { return getField(10); }
     public String getCreditMax() { return getField(11); }
     public String getCreditStartingBalance() { return getField(12); }
-
-    public static void main(String[] args) {
-        try {
-            CSVReader reader = CSVReader.getInstance("CS 3331 - Bank Users.csv");
-            List<String[]> users = reader.getAllUsers();
-            // Example usage
-            for (String[] user : users) {
-                System.out.println(user[5]); // Print first and last name
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
