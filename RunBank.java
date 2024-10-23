@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 // main method of entire project goes here
@@ -5,6 +6,14 @@ public class RunBank {
     public static void main (String args[]) {
         Scanner sc = new Scanner(System.in);
         boolean exit = false;
+        String[] userFields;
+
+        try {
+            CSVReader reader = new CSVReader("users.csv");
+        } catch (IOException e) {
+            System.out.println("Error reading users.csv file.");
+            return;
+        }
 
         // Start of the program
         while (!exit) {
@@ -21,6 +30,7 @@ public class RunBank {
 
             String input = sc.next();
 
+            // Ask the user for their choice
             if (input.equalsIgnoreCase("EXIT")) {
                 System.out.println("\nThank you for choosing El Paso Miners Bank. Goodbye!\n");
                 exit = true;
@@ -43,6 +53,7 @@ public class RunBank {
                         case 5:
                             System.out.println("Make a Payment");
                             break;
+                            //TODO Be sure to give full information of customer when selecting admin console
                         case 6:
                             System.out.println("Admin Console");
                             break;
@@ -50,10 +61,12 @@ public class RunBank {
                             System.out.println("Invalid choice. Please try again.");
                             break;
                     }
+                    // Catch the exception if the user enters a non-integer value/choice
                 } catch (NumberFormatException e) {
                     System.out.println("\nInvalid choice. Please try again.\n");
                 }
+                sc.close();
             }
         }
-    } 
+    }
 }
