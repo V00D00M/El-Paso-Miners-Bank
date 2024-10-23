@@ -4,12 +4,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.List;
 import java.util.Map;
 
 public class CSVReader {
+    private static CSVReader instance;
     private Map<String, String[]> userMapByName = new HashMap<>();
-    private Map<String, String[]> userMapBySavingsID = new HashMap<>();
-    private Map<String, String[]> userMapByCheckingID = new HashMap<>();
+    private List<String[]> allUsers = new ArrayList<>();
     private String[] userFields;
 
     public CSVReader(String filePath) throws IOException {
@@ -20,11 +21,16 @@ public class CSVReader {
             if (fields.length > 1) {
                 String key = fields[1] + " " + fields[2];
                 userMapByName.put(key, fields);
-                userMapBySavingsID.put(fields[0], fields);
-                userMapByCheckingID.put(fields[6], fields);
-
+                allUsers.add(fields); // Add the user to the list of all users
             }
         }
+    }
+
+    public static CSVReader getInstance(String filePath) throws IOException {
+        if (instance == null) {
+            instance = new CSVReader(filePath);
+        }
+        return instance;
     }
 
     // Parse a line of CSV data into an array of fields
@@ -49,13 +55,18 @@ public class CSVReader {
         return fields.toArray(new String[0]);
     }
 
+    public List<String[]> getAllUsers() {
+        return allUsers;
+    }
+
     public String[] findUserByName(String firstName, String lastName) {
         String key = firstName + " " + lastName;
         return userMapByName.get(key);
     }
 
     public String[] findUserByID(String id) {
-        return userMapByID.get(id);
+        //return userMapByID.get(id);
+        return null;
     }
 
     // Getter methods to access individual fields by their index

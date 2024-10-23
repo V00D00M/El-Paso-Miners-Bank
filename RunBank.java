@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 // main method of entire project goes here
@@ -6,17 +7,28 @@ public class RunBank {
     public static void main (String args[]) {
         Scanner sc = new Scanner(System.in);
         boolean exit = false;
-        String[] userFields;
+        //static String[] userFields;
+        CSVReader reader;
 
         try {
-            CSVReader reader = new CSVReader("users.csv");
+            reader = CSVReader.getInstance("users.csv");
         } catch (IOException e) {
             System.out.println("Error reading users.csv file.");
             return;
         }
 
-        // Start of the program
+        List<String[]> allUsers = reader.getAllUsers();
+        for (String[] user : reader.getAllUsers()) {
+            for (String field : user) {
+                System.out.print(field + ",");
+            }
+        }
+
+        //Start of the program
         while (!exit) {
+            System.out.println("Please enter your name:");
+
+
             System.out.println("Welcome to the El Paso Miners Bank!");
             System.out.println("How can we help you today?\n");
             System.out.println("1. Inquire Account Balance");
@@ -68,5 +80,20 @@ public class RunBank {
                 sc.close();
             }
         }
+
+        // public static boolean Login(String name) {
+        //     boolean userFields = false;
+        //     do {
+        //         System.out.println("Please enter your first and last name: ");
+        //         String name = sc.next();
+        //         userFields = reader.findUserByName(name);
+        //         if (userFields == false) {
+        //             System.out.println("User not found. Please try again.");
+        //         }
+        //     }
+        //     while (userFields == false);
+        //     return userFields;
+        // }
     }
 }
+

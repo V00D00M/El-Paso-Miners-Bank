@@ -1,10 +1,15 @@
+import java.util.List;
+
 public abstract class Person {
     private String name;
     private String address;
+    private static CSVReader csvReader;
+    private List<Account> accounts;
 
     public Person(String name, String address) {
         this.name = name;
         this.address = address;
+        Person.csvReader = csvReader;
     }
 
     public Account getAccount(String accountNumber) {
@@ -16,8 +21,8 @@ public abstract class Person {
         return null;
     }
 
-    public String getName() {
-        return name;
+    public static boolean login(String name) {
+        String[] user = CSVReader.findUserByName(name);
     }
 
     public String getAddress() {
@@ -27,5 +32,4 @@ public abstract class Person {
     public List<Account> getAccounts() {
         return accounts;
     }
-
 }
