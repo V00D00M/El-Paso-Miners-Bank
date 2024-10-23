@@ -1,4 +1,5 @@
 public class Checking extends Account {
+    // private double overdraftLimit;
     
     public Checking(String accountNumber, double balance) {
         super(accountNumber, balance);
@@ -15,5 +16,7 @@ public class Checking extends Account {
         else {
             System.out.println("Insufficient funds to withdraw $" + amount);
         }
-    }    
+
+    
+}    
 }
