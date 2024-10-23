@@ -9,6 +9,7 @@ public class RunBank {
         String identificationNumber;
         boolean exit = false;
         CSVReader reader;
+        Account
 
         try {
             reader = new CSVReader("CS 3331 - Bank Users.csv");
@@ -38,7 +39,6 @@ public class RunBank {
 
             String[] loggedInUser = reader.getLoggedInUser(identificationNumber);
             System.out.println("Welcome, " + loggedInUser[1] + " " + loggedInUser[2]);
-            System.out.println(loggedInUser[3] + " | " + loggedInUser[4] + " | " + loggedInUser[5] + " | " + loggedInUser[6] + " | " + loggedInUser[7] + " | " + loggedInUser[8] + " | " + loggedInUser[9] + " | " + loggedInUser[10] + " | " + loggedInUser[11] + " | " + loggedInUser[12]);
             // Logs the user in and gets the user's information
             String firstName = loggedInUser[1];
             String lastName = loggedInUser[2];
