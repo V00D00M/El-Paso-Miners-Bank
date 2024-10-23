@@ -1,7 +1,3 @@
-public class Customer extends Person {
-    private String customerID;
-
-
 public class Customer {
     protected String customerID;
     protected List<Account> account;
