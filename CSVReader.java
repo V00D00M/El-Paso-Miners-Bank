@@ -1,42 +1,28 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.List;
-import java.util.Map;
 
 public class CSVReader {
-    private static CSVReader instance;
-    private Map<String, String[]> userMapByName = new HashMap<>();
-    private List<String[]> allUsers = new ArrayList<>();
-    private String[] userFields;
+    public List<String[]> allUsers = new ArrayList<>();
+    private String filePath;
 
     public CSVReader(String filePath) throws IOException {
-        // Read the CSV file and store the data in a map
+        this.filePath = filePath;
         readCSVFile(filePath);
-    }
-
-    // Read the CSV file and store the data in a map
-    public static CSVReader getInstance(String filePath) throws IOException {
-        if (instance == null) {
-            instance = new CSVReader(filePath);
-        }
-        return instance;
     }
 
     private void readCSVFile(String filePath) throws IOException {
         String line;
-
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             br.readLine(); // Skip header line
             while ((line = br.readLine()) != null) {
                 String[] values = parseCSVLine(line);
                 allUsers.add(values);
-                userMapByName.put(values[1] + " " + values[2], values);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -62,29 +48,37 @@ public class CSVReader {
         return fields.toArray(new String[0]);
     }
 
-    public List<String[]> getAllUsers() {
-        return allUsers;
-    }
-
-    // Getter methods to access individual fields by their index
-    public String getField(int index) {
-        if (userFields != null && index >= 0 && index < userFields.length) {
-            return userFields[index];
+    public String[] getLoggedInUser(String identificationNumber) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] userDetails = parseCSVLine(line);
+                if (userDetails[0].equals(identificationNumber)) {
+                    return userDetails;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    // Specific getters for commonly accessed fields
-    public String getIdentificationNumber() { return getField(0); }
-    public String getName() { return getField(1) + " " + getField(2); }
-    public String getDateOfBirth() { return getField(3); }
-    public String getAddress() { return getField(4); }
-    public String getPhoneNumber() { return getField(5); }
-    public String getCheckingAccountNumber() { return getField(6); }
-    public String getCheckingStartingBalance() { return getField(7); }
-    public String getSavingsAccountNumber() { return getField(8); }
-    public String getSavingsStartingBalance() { return getField(9); }
-    public String getCreditAccountNumber() { return getField(10); }
-    public String getCreditMax() { return getField(11); }
-    public String getCreditStartingBalance() { return getField(12); }
+    public List<String[]> getAllUsers() {
+        return allUsers;
+    }
+
+    // public static void main(String[] args) {
+    //     try {
+    //         CSVTestReader reader = new CSVTestReader("CS 3331 - Bank Users.csv");
+    //         List<String[]> allUsers = reader.getAllUsers();
+    //         for (String[] user : allUsers) {
+    //             for (String field : user) {
+    //                 System.out.print(field);
+    //             }
+    //             System.out.println();
+    //         }
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 }

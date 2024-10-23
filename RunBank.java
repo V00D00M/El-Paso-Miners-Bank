@@ -6,13 +6,12 @@ import java.util.Scanner;
 public class RunBank {
     public static void main (String args[]) {
         Scanner sc = new Scanner(System.in);
+        String identificationNumber;
         boolean exit = false;
-        //static String[] userFields;
         CSVReader reader;
 
         try {
-            reader = CSVReader.getInstance("CS 3331 - Bank Users.csv");
-            List<String[]> users = reader.getAllUsers();
+            reader = new CSVReader("CS 3331 - Bank Users.csv");
         } catch (IOException e) {
             System.out.println("Error reading users.csv file.");
             return;
@@ -20,7 +19,39 @@ public class RunBank {
 
         //Start of the program
         while (!exit) {
-            System.out.println("Please enter your name:");
+            System.out.print("Please enter your ID number:");
+            identificationNumber = sc.next();
+
+            boolean userFound = false;
+
+            for (String[] user : reader.allUsers) {
+                if (user[0].equals(identificationNumber)) {
+                    userFound = true;
+                    break;
+                }
+            }
+
+            if (!userFound) {
+                System.out.println("Invalid ID number. Please try again.");
+                continue; // Prompt for ID again
+            }
+
+            String[] loggedInUser = reader.getLoggedInUser(identificationNumber);
+            System.out.println("Welcome, " + loggedInUser[1] + " " + loggedInUser[2]);
+            System.out.println(loggedInUser[3] + " | " + loggedInUser[4] + " | " + loggedInUser[5] + " | " + loggedInUser[6] + " | " + loggedInUser[7] + " | " + loggedInUser[8] + " | " + loggedInUser[9] + " | " + loggedInUser[10] + " | " + loggedInUser[11] + " | " + loggedInUser[12]);
+            // Logs the user in and gets the user's information
+            String firstName = loggedInUser[1];
+            String lastName = loggedInUser[2];
+            String dateOfBirth = loggedInUser[3];
+            String address = loggedInUser[4];
+            String phoneNumber = loggedInUser[5];
+            String checkingAccountNumber = loggedInUser[6];
+            double checkingStartingBalance = Double.parseDouble(loggedInUser[7]);
+            String savingsAccountNumber = loggedInUser[8];
+            double savingsStartingBalance = Double.parseDouble(loggedInUser[9]);
+            String creditAccountNumber = loggedInUser[10];
+            int creditMax = Integer.parseInt(loggedInUser[11]);
+            double creditStartingBalance = Double.parseDouble(loggedInUser[12]);
 
 
             System.out.println("Welcome to the El Paso Miners Bank!");
@@ -46,6 +77,7 @@ public class RunBank {
                     switch (choice) {
                         case 1:
                             System.out.println("Inquire Account Balance");
+                            //InquireMenu(new Account(checkingAccountNumber, checkingStartingBalance), new Account(savingsAccountNumber, savingsStartingBalance), new Account(creditAccountNumber, creditStartingBalance));
                             break;
                         case 2:
                             System.out.println("Make a Deposit");
@@ -71,8 +103,157 @@ public class RunBank {
                 } catch (NumberFormatException e) {
                     System.out.println("\nInvalid choice. Please try again.\n");
                 }
-                sc.close();
             }
+        }
+    }
+
+    // Account Menu
+    public static void InquireMenu(Account checking, Account savings, Account credit) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Which account would you like to inquire about?");
+        System.out.println("1. Checking Account");
+        System.out.println("2. Savings Account");
+        System.out.println("3. Credit Account");
+        System.out.print("Enter your choice: ");
+        String input = sc.next();
+        try {
+            int choice = Integer.parseInt(input);
+            switch (choice) {
+                case 1:
+                    System.out.println("Checking Account" + checking.getAccountNumber() + " Balance: $" + checking.getBalance());
+                    break;
+                case 2:
+                    System.out.println("Savings Account" + savings.getAccountNumber() + " Balance: $" + savings.getBalance());
+                    break;
+                case 3:
+                    System.out.println("Credit Account" + credit.getAccountNumber() + " Balance: $" + credit.getBalance());
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("\nInvalid choice. Please try again.\n");
+        }
+    }
+
+
+    public static void DepositMenu(Person person, Account checking, Account savings, Account credit) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Which account would you like to make a deposit to?");
+        try {
+            System.out.println("1. Checking Account");
+            System.out.println("2. Savings Account");
+            System.out.println("3. Credit Account");
+            System.out.print("Enter your choice: ");
+            String input = sc.next();
+            try {
+                int choice = Integer.parseInt(input);
+                System.out.print("Enter the amount you would like to deposit: $");
+                double amount = sc.nextDouble();
+                switch (choice) {
+                    case 1:
+                        checking.deposit(amount);
+                        System.out.println("Checking Account Balance: $" + checking.getBalance());
+                        break;
+                    case 2:
+                        savings.deposit(amount);
+                        System.out.println("Savings Account Balance: $" + savings.getBalance());
+                        break;
+                    case 3:
+                        credit.deposit(amount);
+                        System.out.println("Credit Account Balance: $" + credit.getBalance());
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nInvalid choice. Please try again.\n");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("\nInvalid choice. Please try again.\n");
+        } 
+    }
+
+
+    public static void WithdrawMenu(Person person, Account checking, Account savings, Account credit) {
+        Scanner sc = new Scanner(System.in);
+        try {
+            System.out.println("Which account would you like to make a withdrawal from?");
+            System.out.println("1. Checking Account");
+            System.out.println("2. Savings Account");
+            System.out.println("3. Credit Account");
+            System.out.print("Enter your choice: ");
+            String input = sc.next();
+            try {
+                int choice = Integer.parseInt(input);
+                System.out.print("Enter the amount you would like to withdraw: $");
+                double amount = sc.nextDouble();
+                switch (choice) {
+                    case 1:
+                        checking.withdraw(amount);
+                        System.out.println("Checking Account Balance: $" + checking.getBalance());
+                        break;
+                    case 2:
+                        savings.withdraw(amount);
+                        System.out.println("Savings Account Balance: $" + savings.getBalance());
+                        break;
+                    case 3:
+                        credit.withdraw(amount);
+                        System.out.println("Credit Account Balance: $" + credit.getBalance());
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nInvalid choice. Please try again.\n");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("\nInvalid choice. Please try again.\n");
+        }
+    }
+
+//     public static void TransferMenu(Person person, Account checking, Account savings, Account credit) {
+        
+// }
+
+    public static void PaymentMenu(Person person, Account checking, Account savings, Account credit) {
+        Scanner sc = new Scanner(System.in);
+        try {
+            System.out.println("Which account would you like to make a payment from?");
+            System.out.println("1. Checking Account");
+            System.out.println("2. Savings Account");
+            System.out.println("3. Credit Account");
+            System.out.print("Enter your choice: ");
+            String input = sc.next();
+            try {
+                int choice = Integer.parseInt(input);
+                System.out.print("Enter the amount you would like to pay: $");
+                double amount = sc.nextDouble();
+                switch (choice) {
+                    case 1:
+                        checking.withdraw(amount);
+                        System.out.println("Checking Account Balance: $" + checking.getBalance());
+                        break;
+                    case 2:
+                        savings.withdraw(amount);
+                        System.out.println("Savings Account Balance: $" + savings.getBalance());
+                        break;
+                    case 3:
+                        credit.withdraw(amount);
+                        System.out.println("Credit Account Balance: $" + credit.getBalance());
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nInvalid choice. Please try again.\n");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("\nInvalid choice. Please try again.\n");
         }
     }
 }
