@@ -18,7 +18,7 @@ public abstract class Person {
      * @param DOB the date of birth of the person
      * @param phoneNumber the phone number of the person
      */
-    public Person(String firstName, String lastName, String address, String DOB, String phoneNumber) {
+    public Person(String firstName, String lastName, String DOB, String address, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

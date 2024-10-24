@@ -534,7 +534,7 @@ public class RunBank {
      */
     private static void writeBalancesToCSV(Customer[] customers) {
         try (FileWriter writer = new FileWriter("updated_balances.csv")) {
-            writer.append("Identification Number,First Name,Last Name,Address,Date of Birth,Phone Number,Checking Account Number,Checking Balance,Savings Account Number,Savings Balance,Credit Account Number,Credit Max,Credit Balance\n");
+            writer.append("Identification Number,First Name,Last Name,Date of Birth,Address,Phone Number,Checking Account Number,Checking Balance,Savings Account Number,Savings Balance,Credit Account Number,Credit Max,Credit Balance\n");
             for (Customer cx : customers) {
                 writer.append(cx.getCustomerID()).append(',')
                 .append(cx.firstName).append(',')
