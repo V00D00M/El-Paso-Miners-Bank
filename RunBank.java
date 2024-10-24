@@ -50,19 +50,23 @@ public class RunBank {
                     switch (choice) {
                         case 1:
                             System.out.println("Inquire Account Balance");
-                            InquireBalance(loggedInUser, loggedInUser, null, null, null, null);
+                            InquireBalance(loggedInUser);
                             break;
                         case 2:
                             System.out.println("Make a Deposit");
+                            DepositMenu(loggedInUser);
                             break;
                         case 3:
                             System.out.println("Make a Withdrawal");
+                            WithdrawMenu(loggedInUser);
                             break;
                         case 4:
                             System.out.println("Transfer Money Between Accounts");
+                            // TransferMenu(loggedInUser);
                             break;
                         case 5:
                             System.out.println("Make a Payment");
+                            
                             break;
                             //TODO Be sure to give full information of customer when selecting admin console
                         case 6:
@@ -94,21 +98,22 @@ public class RunBank {
             int choice = Integer.parseInt(input);
             switch (choice) {
                 case 1:
-                    System.out.println("Checking Account-" + cx.account.get(0) + " Balance: $" + cx.account.get(0));
-                    logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Checking-" + cx.account.get(0) + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + checking.getBalance());
+                    System.out.println("Checking Account-" + cx.account.get(0).getAccountNumber() + " Balance: $" + cx.account.get(0).getBalance());
+                    logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(0).getBalance());
                     log(logOutput);
                     break;
                 case 2:
-                    System.out.println("Savings Account-" + savings.getAccountNumber() + " Balance: $" + savings.getBalance());
-                    logOutput = (firstName + " " + lastName + " made a balance inquiry on Savings-" + savings.getAccountNumber() + ". " + firstName + " " + lastName + "'s balance is $" + savings.getBalance());
+                    System.out.println("Savings Account-" + cx.account.get(1).getAccountNumber() + " Balance: $" + cx.account.get(1).getBalance());
+                    logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(1).getBalance());
+                    log(logOutput);
                     break;
                 case 3:
-                    System.out.println("Credit Account-" + credit.getAccountNumber() + " Balance: $" + credit.getBalance());
-                    logOutput = (firstName + " " + lastName + " made a balance inquiry on Checking-" + credit.getAccountNumber() + ". " + firstName + " " + lastName + "'s balance is $" + credit.getBalance());
+                    System.out.println("Credit Account-" + cx.account.get(2).getAccountNumber() + " Balance: $" + cx.account.get(2).getBalance());
+                    logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Checking-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
+                    log(logOutput);
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
-                    log(logOutput);
                     break;
             }
         } catch (NumberFormatException e) {
@@ -117,8 +122,9 @@ public class RunBank {
     }
 
 
-    public static void DepositMenu(Person firstName, Person lastName, Account checking, Account savings, Account credit) {
+    public static void DepositMenu(Customer cx) {
         Scanner sc = new Scanner(System.in);
+        String logOutput = "";
         System.out.println("Which account would you like to make a deposit to?");
         try {
             System.out.println("1. Checking Account");
@@ -132,16 +138,22 @@ public class RunBank {
                 double amount = sc.nextDouble();
                 switch (choice) {
                     case 1:
-                        checking.deposit(amount);
-                        System.out.println("Checking Account Balance: $" + checking.getBalance());
+                        cx.account.get(0).deposit(amount);
+                        System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " made a deposit to Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(0).getBalance());
+                        log(logOutput);
                         break;
                     case 2:
-                        savings.deposit(amount);
-                        System.out.println("Savings Account Balance: $" + savings.getBalance());
+                        cx.account.get(1).deposit(amount);
+                        System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " made a deposit to Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(1).getBalance());
+                        log(logOutput);
                         break;
                     case 3:
-                        credit.deposit(amount);
-                        System.out.println("Credit Account Balance: $" + credit.getBalance());
+                        cx.account.get(2).deposit(amount);
+                        System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " made a deposit to Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
+                        log(logOutput);
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
@@ -155,9 +167,9 @@ public class RunBank {
         } 
     }
 
-
-    public static void WithdrawMenu(Person person, Account checking, Account savings, Account credit) {
+    public static void WithdrawMenu(Customer cx) {
         Scanner sc = new Scanner(System.in);
+        String logOutput = "";
         try {
             System.out.println("Which account would you like to make a withdrawal from?");
             System.out.println("1. Checking Account");
@@ -171,16 +183,22 @@ public class RunBank {
                 double amount = sc.nextDouble();
                 switch (choice) {
                     case 1:
-                        checking.withdraw(amount);
-                        System.out.println("Checking Account Balance: $" + checking.getBalance());
+                        cx.account.get(0).withdraw(amount);
+                        System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(0).getBalance());
+                        log(logOutput);
                         break;
                     case 2:
-                        savings.withdraw(amount);
-                        System.out.println("Savings Account Balance: $" + savings.getBalance());
+                        cx.account.get(1).withdraw(amount);
+                        System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(1).getBalance());
+                        log(logOutput);
                         break;
                     case 3:
-                        credit.withdraw(amount);
-                        System.out.println("Credit Account Balance: $" + credit.getBalance());
+                        cx.account.get(2).withdraw(amount);
+                        System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
+                        log(logOutput);
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
@@ -194,17 +212,31 @@ public class RunBank {
         }
     }
 
-//     public static void TransferMenu(Person person, Account checking, Account savings, Account credit) {
-        
-// }
+    public static void verifyPayment(Customer cx, int checkSaveAcc, double amt){
+        double accTotal = cx.account.get(checkSaveAcc).getBalance();
+        if(amt > accTotal){
+            System.out.println("Youre broke and cant pay these bills");
+            return;
+        } 
+        else if((cx.account.get(3).getBalance() + amt) > 0){
+            System.out.println("Sorry thats too much money, we'll make the change for you");
+            cx.account.get(checkSaveAcc).withdraw(cx.account.get(3).getBalance());
+            cx.account.get(3).deposit(cx.account.get(3).getBalance());
+        } else {
+            System.out.println("Approving account payment");
+            System.out.println("Good Job!");
 
-    public static void PaymentMenu(Person person, Account checking, Account savings, Account credit) {
+            cx.account.get(checkSaveAcc).withdraw(amt);
+            cx.account.get(3).deposit(amt);
+        }
+    }
+
+    public static void PaymentMenu(Customer cx) {
         Scanner sc = new Scanner(System.in);
         try {
             System.out.println("Which account would you like to make a payment from?");
             System.out.println("1. Checking Account");
             System.out.println("2. Savings Account");
-            System.out.println("3. Credit Account");
             System.out.print("Enter your choice: ");
             String input = sc.next();
             try {
@@ -213,16 +245,12 @@ public class RunBank {
                 double amount = sc.nextDouble();
                 switch (choice) {
                     case 1:
-                        checking.withdraw(amount);
-                        System.out.println("Checking Account Balance: $" + checking.getBalance());
+                        verifyPayment(cx, 0, amount);
+                        System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                         break;
                     case 2:
-                        savings.withdraw(amount);
-                        System.out.println("Savings Account Balance: $" + savings.getBalance());
-                        break;
-                    case 3:
-                        credit.withdraw(amount);
-                        System.out.println("Credit Account Balance: $" + credit.getBalance());
+                        verifyPayment(cx, 1, amount);
+                        System.out.println("Checking Account Balance: $" + cx.account.get(1).getBalance());
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
@@ -249,5 +277,19 @@ public class RunBank {
             e.printStackTrace();
         }
     }
+
+    // private static void writeBalancesToNewCsv(Customer cx) {
+    //     try (FileWriter writer = new FileWriter(getCsvFilePath())) {
+    //         for (Account account : cx.account) {
+    //             writer.append(account.getAccountNumber())
+    //                   .append(',')
+    //                   .append(String.valueOf(account.getBalance()))
+    //                   .append('\n');
+    //         }
+    //     } catch (IOException e) {
+    //         System.out.println("An error occurred while writing to the CSV file.");
+    //         e.printStackTrace();
+    //     }
+    // }
 }
 
