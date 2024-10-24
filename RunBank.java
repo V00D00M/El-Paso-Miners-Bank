@@ -17,7 +17,6 @@ public class RunBank {
 
         String identificationNumber = "";
         boolean exit = false;
-        // tempCustomer = tempCustomer.getLoggedInUser(identificationNumber, customerDB);
 
         System.out.flush();
         System.out.print("Please enter your ID number:");
@@ -51,7 +50,7 @@ public class RunBank {
                     switch (choice) {
                         case 1:
                             System.out.println("Inquire Account Balance");
-                            //InquireMenu(new Account(checkingAccountNumber, checkingStartingBalance), new Account(savingsAccountNumber, savingsStartingBalance), new Account(creditAccountNumber, creditStartingBalance));
+                            InquireBalance(loggedInUser, loggedInUser, null, null, null, null);
                             break;
                         case 2:
                             System.out.println("Make a Deposit");
@@ -82,7 +81,7 @@ public class RunBank {
     }
 
     // Account Menu
-    public static void InquireBalance(Person firstName, Person lastName, Account checking, Account savings, Account credit, Account balance) {
+    public static void InquireBalance(Customer cx) {
         Scanner sc = new Scanner(System.in);
         String logOutput = "";
         System.out.println("Which account would you like to inquire about?");
@@ -95,8 +94,8 @@ public class RunBank {
             int choice = Integer.parseInt(input);
             switch (choice) {
                 case 1:
-                    System.out.println("Checking Account-" + checking.getAccountNumber() + " Balance: $" + checking.getBalance());
-                    logOutput = (firstName + " " + lastName + " made a balance inquiry on Checking-" + checking.getAccountNumber() + ". " + firstName + " " + lastName + "'s balance is $" + checking.getBalance());
+                    System.out.println("Checking Account-" + cx.account.get(0) + " Balance: $" + cx.account.get(0));
+                    logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Checking-" + cx.account.get(0) + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + checking.getBalance());
                     log(logOutput);
                     break;
                 case 2:
