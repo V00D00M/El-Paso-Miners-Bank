@@ -6,10 +6,10 @@ public class Customer extends Person {
     protected List<Account> account;
     
 
-    public Customer(String customerID) {
-        super();
+    public Customer(String customerID,String firstName, String lastName, String address, String DOB, String phoneNumber) {
+        super(firstName, lastName, address, DOB, phoneNumber);
         this.customerID = customerID;
-        this.account = new ArrayList<Account>(); // Initialize the account list correctly
+        this.account = new ArrayList<Account>(); // Initialize the account list correctly 
     }
 
     public Account getAccount(int accountNumber) {
