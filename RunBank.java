@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -20,6 +22,7 @@ public class RunBank {
         //Start of the program
         while (!exit) {
             System.out.print("Please enter your ID number:");
+            System.out.flush();
             identificationNumber = sc.next();
 
             boolean userFound = false;
@@ -38,7 +41,6 @@ public class RunBank {
 
             String[] loggedInUser = reader.getLoggedInUser(identificationNumber);
             System.out.println("Welcome, " + loggedInUser[1] + " " + loggedInUser[2]);
-            System.out.println(loggedInUser[3] + " | " + loggedInUser[4] + " | " + loggedInUser[5] + " | " + loggedInUser[6] + " | " + loggedInUser[7] + " | " + loggedInUser[8] + " | " + loggedInUser[9] + " | " + loggedInUser[10] + " | " + loggedInUser[11] + " | " + loggedInUser[12]);
             // Logs the user in and gets the user's information
             String firstName = loggedInUser[1];
             String lastName = loggedInUser[2];
@@ -108,8 +110,9 @@ public class RunBank {
     }
 
     // Account Menu
-    public static void InquireMenu(Account checking, Account savings, Account credit) {
+    public static void InquireBalance(Person firstName, Person lastName, Account checking, Account savings, Account credit, Account balance) {
         Scanner sc = new Scanner(System.in);
+        String logOutput = "";
         System.out.println("Which account would you like to inquire about?");
         System.out.println("1. Checking Account");
         System.out.println("2. Savings Account");
@@ -120,16 +123,21 @@ public class RunBank {
             int choice = Integer.parseInt(input);
             switch (choice) {
                 case 1:
-                    System.out.println("Checking Account" + checking.getAccountNumber() + " Balance: $" + checking.getBalance());
+                    System.out.println("Checking Account-" + checking.getAccountNumber() + " Balance: $" + checking.getBalance());
+                    logOutput = (firstName + " " + lastName + " made a balance inquiry on Checking-" + checking.getAccountNumber() + ". " + firstName + " " + lastName + "'s balance is $" + checking.getBalance());
+                    log(logOutput);
                     break;
                 case 2:
-                    System.out.println("Savings Account" + savings.getAccountNumber() + " Balance: $" + savings.getBalance());
+                    System.out.println("Savings Account-" + savings.getAccountNumber() + " Balance: $" + savings.getBalance());
+                    logOutput = (firstName + " " + lastName + " made a balance inquiry on Savings-" + savings.getAccountNumber() + ". " + firstName + " " + lastName + "'s balance is $" + savings.getBalance());
                     break;
                 case 3:
-                    System.out.println("Credit Account" + credit.getAccountNumber() + " Balance: $" + credit.getBalance());
+                    System.out.println("Credit Account-" + credit.getAccountNumber() + " Balance: $" + credit.getBalance());
+                    logOutput = (firstName + " " + lastName + " made a balance inquiry on Checking-" + credit.getAccountNumber() + ". " + firstName + " " + lastName + "'s balance is $" + credit.getBalance());
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
+                    log(logOutput);
                     break;
             }
         } catch (NumberFormatException e) {
@@ -138,7 +146,7 @@ public class RunBank {
     }
 
 
-    public static void DepositMenu(Person person, Account checking, Account savings, Account credit) {
+    public static void DepositMenu(Person firstName, Person lastName, Account checking, Account savings, Account credit) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Which account would you like to make a deposit to?");
         try {
@@ -254,6 +262,20 @@ public class RunBank {
             }
         } catch (NumberFormatException e) {
             System.out.println("\nInvalid choice. Please try again.\n");
+        }
+    }
+
+    public static void log(String message) {
+        try {
+            File file = new File("log.txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter writer = new FileWriter(file, true);
+            writer.write(message + "\n");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -10,7 +10,7 @@ public abstract class Account {
         this.balance = balance;
     }
 
-    public Account(String accountNumber, double balance, int creditMax) {
+    public Account(String accountNumber, int creditMax, double balance) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.creditMax = creditMax;
