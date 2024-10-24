@@ -6,16 +6,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
+/**
+ * The CSVReader class provides functionality to read customer data from a CSV file
+ * and create Customer objects.
+ */
 public class CSVReader {
     private Scanner CSVReader;
 
-    // Default constructor
-    public CSVReader(){
-
-    }
-
-    //This function will create and populate our database from our CSV.
+    /**
+     * Default constructor for CSVReader.
+     */
+    public CSVReader(){}    
+    
+    /**
+    * Reads customer data from a CSV file and returns an array of Customer objects.
+    *
+    * @param fileName the name of the CSV file to read
+    * @return an array of Customer objects
+    * @throws IOException if an I/O error occurs
+    */
     public Customer[] getCustomers(String fileName) throws IOException {
 		Customer[] customers = new Customer[getNumOfLines(fileName)];
         Customer customerTemp;
@@ -42,16 +51,18 @@ public class CSVReader {
             //Instatiates saveTemp and populates list
             saveTemp = new Savings(tokens[10], Double.parseDouble(tokens[11]));
             customerTemp.popAccList(saveTemp);
-            //assigns customer object to 
+            //assigns customer object to creditTemp and populates list
             creditTemp = new Credit(tokens[12],Integer.parseInt(tokens[13]),Double.parseDouble(tokens[14]));
             customerTemp.popAccList(creditTemp);
 			customers[index] = customerTemp;
 			index++;
 		}
-
 		return customers;
 	}
 
+    /**
+     * Returns the number of lines in a CSV file.
+     */
     public int getNumOfLines(String fileName) throws IOException {
 		this.CSVReader =  new Scanner(new File(fileName));
 		int count = 0;

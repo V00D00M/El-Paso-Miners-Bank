@@ -28,8 +28,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-// main method of entire project goes here
+/**
+ * The RunBank class is the main entry point for the banking system application.
+ * It handles user interactions, reads customer data from a CSV file, and performs various banking operations.
+ */
 public class RunBank {
+
+    /**
+     * The main method is the entry point of the application.
+     *
+     * @param args command-line arguments
+     * @throws IOException if an I/O error occurs
+     */
     public static void main (String args[]) throws IOException {
         Scanner sc = new Scanner(System.in);
 
@@ -37,6 +47,7 @@ public class RunBank {
         CSVReader csvReader = new CSVReader();
         //logged in user is used as a pointer value of type customer, will be fully initialized when user logs in
         Customer loggedInUser = new Customer("","","","","","");
+        // Customer array that will hold all the customers in the database
         Customer [] customerDB = csvReader.getCustomers("CS 3331 - Bank Users.csv");
 
         String identificationNumber = "";
@@ -45,11 +56,10 @@ public class RunBank {
         System.out.flush();
         askUserRole(customerDB);
 
-        
-
         System.out.print("Please enter your ID number:");
         identificationNumber = sc.next();
 
+        // Get the logged in user
         loggedInUser = loggedInUser.getLoggedInUser(identificationNumber, customerDB);
         System.out.println("Welcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
         //Start of the program
@@ -75,23 +85,23 @@ public class RunBank {
                 try {
                     int choice = Integer.parseInt(input);
                     switch (choice) {
-                        case 1:
+                        case 1: // Inquire Account Balance
                             System.out.println("Inquire Account Balance");
                             InquireBalance(loggedInUser);
                             break;
-                        case 2:
+                        case 2: // Make a Deposit
                             System.out.println("Make a Deposit");
                             DepositMenu(loggedInUser);
                             break;
-                        case 3:
+                        case 3: // Make a Withdrawal
                             System.out.println("Make a Withdrawal");
                             WithdrawMenu(loggedInUser);
                             break;
-                        case 4:
+                        case 4: // Transfer Money Between Accounts
                             System.out.println("Transfer Money Between Accounts");
                             TransferMenu(loggedInUser, "", customerDB);
                             break;
-                        case 5:
+                        case 5: // Make a Payment
                             System.out.println("Make a Payment");
                             PaymentMenu(loggedInUser);
                             break;
@@ -108,7 +118,11 @@ public class RunBank {
         writeBalancesToCSV(customerDB);
     }
 
-    // Account Menu
+    /**
+     * Displays the inquire balance menu and allows the user to inquire about their account balance.
+     * 
+     * @param cx
+     */
     public static void InquireBalance(Customer cx) {
         Scanner sc = new Scanner(System.in);
         String logOutput = "";
@@ -121,22 +135,22 @@ public class RunBank {
         try {
             int choice = Integer.parseInt(input);
             switch (choice) {
-                case 1:
+                case 1: // Checking Account
                     System.out.println("Checking Account-" + cx.account.get(0).getAccountNumber() + " Balance: $" + cx.account.get(0).getBalance());
                     logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(0).getBalance());
                     log(logOutput);
                     break;
-                case 2:
+                case 2: // Savings Account
                     System.out.println("Savings Account-" + cx.account.get(1).getAccountNumber() + " Balance: $" + cx.account.get(1).getBalance());
                     logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(1).getBalance());
                     log(logOutput);
                     break;
-                case 3:
+                case 3: // Credit Account
                     System.out.println("Credit Account-" + cx.account.get(2).getAccountNumber() + " Balance: $" + cx.account.get(2).getBalance());
                     logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Checking-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
                     log(logOutput);
                     break;
-                default:
+                default: // Invalid choice
                     System.out.println("Invalid choice. Please try again.");
                     break;
             }
@@ -145,7 +159,11 @@ public class RunBank {
         }
     }
 
-
+    /**
+     * Displays the deposit menu and allows the user to make a deposit to their account.
+     * 
+     * @param cx
+     */
     public static void DepositMenu(Customer cx) {
         Scanner sc = new Scanner(System.in);
         String logOutput = "";
@@ -161,19 +179,19 @@ public class RunBank {
                 System.out.print("Enter the amount you would like to deposit: $");
                 double amount = sc.nextDouble();
                 switch (choice) {
-                    case 1:
+                    case 1: // Checking Account
                         cx.account.get(0).deposit(amount);
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " made a deposit to Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(0).getBalance());
                         log(logOutput);
                         break;
-                    case 2:
+                    case 2: // Savings Account
                         cx.account.get(1).deposit(amount);
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " made a deposit to Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(1).getBalance());
                         log(logOutput);
                         break;
-                    case 3:
+                    case 3: // Credit Account
                         cx.account.get(2).deposit(amount);
                         System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " made a deposit to Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
@@ -191,6 +209,11 @@ public class RunBank {
         } 
     }
 
+    /**
+     * Displays the withdrawal menu and allows the user to make a withdrawal from their account.
+     * 
+     * @param cx
+     */
     public static void WithdrawMenu(Customer cx) {
         Scanner sc = new Scanner(System.in);
         String logOutput = "";
@@ -206,19 +229,19 @@ public class RunBank {
                 System.out.print("Enter the amount you would like to withdraw: $");
                 double amount = sc.nextDouble();
                 switch (choice) {
-                    case 1:
+                    case 1: // Checking Account
                         cx.account.get(0).withdraw(amount);
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(0).getBalance());
                         log(logOutput);
                         break;
-                    case 2:
+                    case 2: // Savings Account
                         cx.account.get(1).withdraw(amount);
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(1).getBalance());
                         log(logOutput);
                         break;
-                    case 3:
+                    case 3: // Credit Account
                         cx.account.get(2).withdraw(amount);
                         System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
@@ -236,12 +259,20 @@ public class RunBank {
         }
     }
 
+    /**
+     * Verifies if the user has enough money in their account to make a payment.
+     * 
+     * @param cx
+     * @param checkSaveAcc
+     * @param amt
+     */
     public static void verifyPayment(Customer cx, int checkSaveAcc, double amt){
+        // Check if the user has enough money in their account to make the payment
         double accTotal = cx.account.get(checkSaveAcc).getBalance();
         if(amt > accTotal){
             System.out.println("Youre broke and cant pay these bills");
             return;
-        } 
+        }
         else if(cx.account.size() > 2 && (cx.account.get(2).getBalance() + amt) > 0){
             System.out.println("Sorry thats too much money, we'll make the change for you");
             cx.account.get(checkSaveAcc).withdraw(cx.account.get(3).getBalance());
@@ -255,6 +286,11 @@ public class RunBank {
         }
     }
 
+    /**
+     * Displays the payment menu and allows the user to make a payment from their account.
+     * 
+     * @param cx
+     */
     public static void PaymentMenu(Customer cx) {
         Scanner sc = new Scanner(System.in);
         String logOutput;
@@ -269,13 +305,13 @@ public class RunBank {
                 System.out.print("Enter the amount you would like to pay: $");
                 double amount = sc.nextDouble();
                 switch (choice) {
-                    case 1:
+                    case 1: // Checking Account
                         verifyPayment(cx, 0, amount);
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " Made payment from Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
                         log(logOutput);
                         break;
-                    case 2:
+                    case 2: // Savings Account
                         verifyPayment(cx, 1, amount);
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " Made payment from Savings-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
@@ -293,7 +329,15 @@ public class RunBank {
         }
     }
 
+    /**
+     * Displays the transfer menu and allows the user to transfer money between accounts.
+     * 
+     * @param cx
+     * @param accountNumber
+     * @param customerDB
+     */
     public static void TransferMenu(Customer cx, String accountNumber, Customer[] customerDB) {
+        // Transfer money between accounts
         Scanner sc = new Scanner(System.in);
         String logOutput;
         try {
@@ -317,7 +361,7 @@ public class RunBank {
             if (transferChoice == 1) {
                 // Transfer to own account
                 switch (choice) {
-                    case 1:
+                    case 1: // Checking Account
                         cx.account.get(0).withdraw(amount);
                         cx.account.get(1).deposit(amount);
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
@@ -325,7 +369,7 @@ public class RunBank {
                         logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Checking-" + cx.account.get(0).getAccountNumber() + " to Savings-" + cx.account.get(1).getAccountNumber();
                         log(logOutput);
                         break;
-                    case 2:
+                    case 2: // Savings Account
                         cx.account.get(1).withdraw(amount);
                         cx.account.get(0).deposit(amount);
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
@@ -349,14 +393,14 @@ public class RunBank {
                         if (account.getAccountNumber().equals(recipientAccountNumber)) {
                             recipientFound = true;
                             switch (choice) {
-                                case 1:
+                                case 1: // Checking Account
                                     cx.account.get(0).withdraw(amount);
                                     account.deposit(amount);
                                     System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                                     logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Checking-" + cx.account.get(0).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account " + account.getAccountNumber();
                                     log(logOutput);
                                     break;
-                                case 2:
+                                case 2: // Savings Account
                                     cx.account.get(1).withdraw(amount);
                                     account.deposit(amount);
                                     System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
@@ -384,21 +428,27 @@ public class RunBank {
         }
     }
 
+    /**
+     * Displays the admin menu and allows the admin to inquire about a customer's account.
+     * 
+     * @param customers the array of customers in the database
+     */
     public static void adminMenu(Customer[] customers) {
         String logOutput;
         Scanner sc = new Scanner(System.in);
         boolean found = false;
         System.out.println("Admin Console");
     
-        while (!found) {
+        while (!found) { // Loop until the customer is found
             System.out.print("Which account would you like to inquire about? Enter the name of the account holder: ");
             String input = sc.nextLine().trim();
     
             try {
                 for (Customer cx : customers) {
                     String fullName = cx.firstName + " " + cx.lastName;
-                    if (fullName.equalsIgnoreCase(input)) {
+                    if (fullName.equalsIgnoreCase(input)) { // Check if the customer is found
                         found = true;
+                        // Display the customer's information
                         System.out.println("Customer Details:");
                         System.out.println("ID: " + cx.getCustomerID());
                         System.out.println("Name: " + cx.firstName + " " + cx.lastName);
@@ -427,6 +477,11 @@ public class RunBank {
         }
     }
 
+    /**
+     * Asks the user for their role and performs actions based on the role.
+     *
+     * @param customerDB the array of customers in the database
+     */
     public static void askUserRole(Customer[] customers) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Are you an Admin or a Customer?");
@@ -437,10 +492,10 @@ public class RunBank {
         try {
             int choice = Integer.parseInt(input);
             switch (choice) {
-                case 1:
+                case 1: // Admin
                     adminMenu(customers);
                     break;
-                case 2:
+                case 2: // Customer
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -453,6 +508,11 @@ public class RunBank {
         }
     }
 
+    /**
+     * Logs a message to a file.
+     *
+     * @param message the message to log
+     */
     public static void log(String message) {
         try {
             File file = new File("log.txt");
@@ -467,9 +527,14 @@ public class RunBank {
         }
     }
 
+    /**
+     * Writes the updated balances of all customers to a CSV file.
+     *
+     * @param customers the array of customers to write to the CSV file
+     */
     private static void writeBalancesToCSV(Customer[] customers) {
         try (FileWriter writer = new FileWriter("updated_balances.csv")) {
-            writer.append("Identification Number,First Name,Last Name,Date of Birth,Address,Phone Number,Checking Account Number,Checking Balance,Savings Account Number,Savings Balance,Credit Account Number,Credit Max,Credit Balance\n");
+            writer.append("Identification Number,First Name,Last Name,Address,Date of Birth,Phone Number,Checking Account Number,Checking Balance,Savings Account Number,Savings Balance,Credit Account Number,Credit Max,Credit Balance\n");
             for (Customer cx : customers) {
                 writer.append(cx.getCustomerID()).append(',')
                 .append(cx.firstName).append(',')
