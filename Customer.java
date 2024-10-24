@@ -3,10 +3,11 @@ import java.util.List;
 
 public class Customer extends Person {
     protected String customerID;
+    protected List<Account> account;
     
 
     public Customer(String customerID) {
-        super.getAccounts();
+        super();
         this.customerID = customerID;
         this.account = new ArrayList<Account>(); // Initialize the account list correctly
     }
@@ -16,9 +17,10 @@ public class Customer extends Person {
             throw new IllegalArgumentException("We do not recognize this account number, please try again");
         }
         for (Account acc : this.account) {
-            if (acc.getAccountNumber() == accountNumber) {
+            if (acc.getAccountNumber().equals(accountNumber)) {
                 return acc; // Return the account if found
             }
         }
         throw new IllegalArgumentException("Account was not found, please try again"); // Throw exception if not found
     }
+}

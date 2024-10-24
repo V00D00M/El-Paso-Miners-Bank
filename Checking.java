@@ -1,6 +1,5 @@
 public class Checking extends Account {
-    // private double overdraftLimit;
-    
+
     public Checking(String accountNumber, double balance) {
         super(accountNumber, balance);
     }

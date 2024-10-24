@@ -9,7 +9,6 @@ public class RunBank {
         String identificationNumber;
         boolean exit = false;
         CSVReader reader;
-        Account
 
         try {
             reader = new CSVReader("CS 3331 - Bank Users.csv");
