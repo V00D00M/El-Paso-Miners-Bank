@@ -20,6 +20,7 @@ public class RunBank {
         //Start of the program
         while (!exit) {
             System.out.print("Please enter your ID number:");
+            System.out.flush();
             identificationNumber = sc.next();
 
             boolean userFound = false;
