@@ -5,9 +5,9 @@ public class Customer extends Person {
     protected String customerID;
     protected List<Account> account;
 
-    public Customer(String customerID,String firstName, String lastName, String address, String DOB, String phoneNumber, String email) {
+    public Customer(String customerID,String firstName, String lastName, String address, String DOB, String phoneNumber) {
         this.customerID = customerID;
-        super(firstName, lastName, address, DOB, phoneNumber, email);
+        super(firstName, lastName, address, DOB, phoneNumber);
         this.account = new ArrayList<Account>(); // Initialize the account list correctly 
     }
 
