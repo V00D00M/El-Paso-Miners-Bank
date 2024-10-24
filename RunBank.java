@@ -6,56 +6,28 @@ import java.util.Scanner;
 
 // main method of entire project goes here
 public class RunBank {
-    public static void main (String args[]) {
+    public static void main (String args[]) throws IOException {
         Scanner sc = new Scanner(System.in);
-        String identificationNumber;
+
+
+        CSVReader csvReader = new CSVReader();
+        //logged in user is used as a pointer value of type customer, will be fully initialized when user logs in
+        Customer loggedInUser = new Customer("","","","","","");
+        Customer [] customerDB = csvReader.getCustomers("CS 3331 - Bank Users.csv");
+
+        String identificationNumber = "";
         boolean exit = false;
-        CSVReader reader;
+        // tempCustomer = tempCustomer.getLoggedInUser(identificationNumber, customerDB);
 
-        try {
-            reader = new CSVReader("CS 3331 - Bank Users.csv");
-        } catch (IOException e) {
-            System.out.println("Error reading users.csv file.");
-            return;
-        }
+        System.out.flush();
+        System.out.print("Please enter your ID number:");
+        identificationNumber = sc.next();
 
+        loggedInUser = loggedInUser.getLoggedInUser(identificationNumber, customerDB);
+        System.out.println("Welcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
         //Start of the program
         while (!exit) {
-            System.out.print("Please enter your ID number:");
-            System.out.flush();
-            identificationNumber = sc.next();
-
-            boolean userFound = false;
-
-            for (String[] user : reader.allUsers) {
-                if (user[0].equals(identificationNumber)) {
-                    userFound = true;
-                    break;
-                }
-            }
-
-            if (!userFound) {
-                System.out.println("Invalid ID number. Please try again.");
-                continue; // Prompt for ID again
-            }
-
-            String[] loggedInUser = reader.getLoggedInUser(identificationNumber);
-            System.out.println("Welcome, " + loggedInUser[1] + " " + loggedInUser[2]);
-            // Logs the user in and gets the user's information
-            String firstName = loggedInUser[1];
-            String lastName = loggedInUser[2];
-            String dateOfBirth = loggedInUser[3];
-            String address = loggedInUser[4];
-            String phoneNumber = loggedInUser[5];
-            String checkingAccountNumber = loggedInUser[6];
-            double checkingStartingBalance = Double.parseDouble(loggedInUser[7]);
-            String savingsAccountNumber = loggedInUser[8];
-            double savingsStartingBalance = Double.parseDouble(loggedInUser[9]);
-            String creditAccountNumber = loggedInUser[10];
-            int creditMax = Integer.parseInt(loggedInUser[11]);
-            double creditStartingBalance = Double.parseDouble(loggedInUser[12]);
-
-
+        // Logs the user in and gets the user's information
             System.out.println("Welcome to the El Paso Miners Bank!");
             System.out.println("How can we help you today?\n");
             System.out.println("1. Inquire Account Balance");

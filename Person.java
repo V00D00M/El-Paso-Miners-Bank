@@ -4,9 +4,7 @@ public abstract class Person {
     protected String address;
     protected String DOB;
     protected String phoneNumber;
-
-    public Person(){}
-
+    
     // creating a list of accounts
     public Person(String firstName, String lastName, String address, String DOB, String phoneNumber) {
         this.firstName = firstName;
