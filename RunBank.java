@@ -24,8 +24,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -48,7 +48,7 @@ public class RunBank {
         //logged in user is used as a pointer value of type customer, will be fully initialized when user logs in
         Customer loggedInUser = new Customer("","","","","","");
         // Customer array that will hold all the customers in the database
-        Customer [] customerDB = csvReader.getCustomers("CS 3331 - Bank Users.csv");
+        Map<String, Customer> customerDB = csvReader.getCustomers("CS 3331 - Bank Users.csv");
 
         String identificationNumber = "";
         boolean exit = false;
@@ -336,7 +336,7 @@ public class RunBank {
      * @param accountNumber
      * @param customerDB
      */
-    public static void TransferMenu(Customer cx, String accountNumber, Customer[] customerDB) {
+    public static void TransferMenu(Customer cx, String accountNumber, Map<String, Customer> customerDB) {
         // Transfer money between accounts
         Scanner sc = new Scanner(System.in);
         String logOutput;
@@ -387,7 +387,7 @@ public class RunBank {
                 String recipientAccountNumber = sc.next();
     
                 boolean recipientFound = false;
-                for (Customer recipient : customerDB) {
+                for (Customer recipient : customerDB.values()) {
                     for (Account account : recipient.account) {
                         //System.out.println("Checking account: " + account.getAccountNumber()); // Debugging statement
                         if (account.getAccountNumber().equals(recipientAccountNumber)) {
@@ -433,7 +433,7 @@ public class RunBank {
      * 
      * @param customers the array of customers in the database
      */
-    public static void adminMenu(Customer[] customers) {
+    public static void adminMenu(Map<String, Customer> customers) {
         String logOutput;
         Scanner sc = new Scanner(System.in);
         boolean found = false;
@@ -444,7 +444,7 @@ public class RunBank {
             String input = sc.nextLine().trim();
     
             try {
-                for (Customer cx : customers) {
+                for (Customer cx : customers.values()) {
                     String fullName = cx.firstName + " " + cx.lastName;
                     if (fullName.equalsIgnoreCase(input)) { // Check if the customer is found
                         found = true;
@@ -482,7 +482,7 @@ public class RunBank {
      *
      * @param customerDB the array of customers in the database
      */
-    public static void askUserRole(Customer[] customers) {
+    public static void askUserRole(Map<String, Customer> customers) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Are you an Admin or a Customer?");
         System.out.println("1. Admin");
@@ -532,27 +532,25 @@ public class RunBank {
      *
      * @param customers the array of customers to write to the CSV file
      */
-    private static void writeBalancesToCSV(Customer[] customers) {
-        try (FileWriter writer = new FileWriter("updated_balances.csv")) {
-            writer.append("Identification Number,First Name,Last Name,Date of Birth,Address,Phone Number,Checking Account Number,Checking Balance,Savings Account Number,Savings Balance,Credit Account Number,Credit Max,Credit Balance\n");
-            for (Customer cx : customers) {
-                writer.append(cx.getCustomerID()).append(',')
-                .append(cx.firstName).append(',')
-                .append(cx.lastName).append(',')
-                .append(cx.getDOB()).append(',')
-                .append(cx.getAddress()).append(',')
-                .append(cx.getPhoneNumber()).append(',')
-                .append(cx.account.get(0).getAccountNumber()).append(',')
-                .append(String.valueOf(cx.account.get(0).getBalance())).append(',')
-                .append(cx.account.get(1).getAccountNumber()).append(',')
-                .append(String.valueOf(cx.account.get(1).getBalance())).append(',')
-                .append(cx.account.get(2).getAccountNumber()).append(',')
-                .append(String.valueOf(cx.account.get(2).getCreditMax())).append(',')
-                .append(String.valueOf(cx.account.get(2).getBalance())).append('\n');
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    private static void writeBalancesToCSV(Map<String, Customer> customers) throws IOException {
+        FileWriter writer = new FileWriter("updated_balances.csv");
+        writer.write("Identification Number,First Name,Last Name,Date of Birth,Address,Phone Number,Checking Account Number,Checking Balance,Savings Account Number,Savings Balance,Credit Account Number,Credit Max,Credit Balance\n");
+        for (Customer cx : customers.values()) {
+            writer.write(cx.getCustomerID() + "," +
+                         cx.firstName + "," +
+                         cx.lastName + "," +
+                         cx.getDOB() + "," +
+                         cx.getAddress() + "," +
+                         cx.getPhoneNumber() + "," +
+                         cx.account.get(0).getAccountNumber() + "," +
+                         cx.account.get(0).getBalance() + "," +
+                         cx.account.get(1).getAccountNumber() + "," +
+                         cx.account.get(1).getBalance() + "," +
+                         cx.account.get(2).getAccountNumber() + "," +
+                         cx.account.get(2).getCreditMax() + "," +
+                         cx.account.get(2).getBalance() + "\n");
         }
+        writer.close();
     }
 }
 

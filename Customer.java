@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The Customer class represents a customer with a unique ID and a list of accounts.
@@ -65,16 +66,15 @@ public class Customer extends Person {
      * Retrieves the logged-in customer by their identification number.
      *
      * @param identificationNumber the identification number to search for
-     * @param customerArr the array of customers to search in
+     * @param customerMap the array of customers to search in
      * @return the Customer object if found
      * @throws IllegalArgumentException if the customer is not found
      */
-    public Customer getLoggedInUser(String identificationNumber, Customer[] customerArr) {
-        for (Customer cx : customerArr) {
+    public Customer getLoggedInUser(String identificationNumber, Map<String, Customer> customerMap) {
+        Customer cx = customerMap.get(identificationNumber);
             if (cx.getCustomerID().equals(identificationNumber)) {
                 return cx;
             }
-        }
-        throw new IllegalArgumentException("We do not recognize this account number, please try again");
+            throw new IllegalArgumentException("We do not recognize this account number, please try again");
     }
 }
