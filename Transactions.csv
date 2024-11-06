@@ -2,7 +2,7 @@ From First Name,From Last Name,From Where,Action,To First Name,To Last Name,To W
 Mickey,Mouse,Checking,pays,Donald,Duck,Checking,100
 Mickey,Mouse,Savings,transfers,Mickey,Mouse,Checking,400
 Mickey,Mouse,Savings,inquires,,,,
-Mickey,Mouse,Checking,withdraws,,,,100
+Mickey,Mouse,Checking,withdraws,,,Savings,100
 ,,,deposits,Mickey,Mouse,Savings,500
 Mickey,Mouse,Savings,transfers,Mickey,Mouse,Credit,300
 ,,,deposits,Alberto,Miranda,Checking,5000
