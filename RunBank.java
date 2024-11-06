@@ -1,6 +1,6 @@
 /* Nathan Ramirez, Alexander Karl, Joel Espino
-10/14/24
-[CS3331] Project assignment 1
+11/12/24
+[CS3331] Project assignment 2
 This work was done individually/as a team and completely our own. we did not share, reproduce, or alter any part of this assignment for any purpose.
 we did not share code, upload this assignment online in any form, or view/received/modified code written from anyone else. All deliverables were
 produced entirely on my/our own. This assignment is part of an academic course at The University of Texas at El Paso and a grade will be assigned
@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * The RunBank class is the main entry point for the banking system application.
@@ -44,10 +46,11 @@ public class RunBank {
         Scanner sc = new Scanner(System.in);
 
 
+        //CSVReader csvReader = new CSVReader();
         CSVReader csvReader = new CSVReader();
         //logged in user is used as a pointer value of type customer, will be fully initialized when user logs in
         Customer loggedInUser = new Customer("","","","","","");
-        // Customer array that will hold all the customers in the database
+        // Customer hashmap that will hold all the customers in the database
         Map<String, Customer> customerDB = csvReader.getCustomers("CS 3331 - Bank Users.csv");
 
         String identificationNumber = "";
@@ -146,8 +149,9 @@ public class RunBank {
                     log(logOutput);
                     break;
                 case 3: // Credit Account
-                    System.out.println("Credit Account-" + cx.account.get(2).getAccountNumber() + " Balance: $" + cx.account.get(2).getBalance());
-                    logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Checking-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
+                    Credit creditAccount = cx.getCreditMax();
+                    System.out.println("Credit Account-" + creditAccount.getAccountNumber() + " Balance: $" + creditAccount.getBalance() + " Credit Max: $" + creditAccount.getCreditMax());
+                    logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Credit-" + creditAccount.getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + creditAccount.getBalance());
                     log(logOutput);
                     break;
                 default: // Invalid choice
@@ -182,19 +186,19 @@ public class RunBank {
                     case 1: // Checking Account
                         cx.account.get(0).deposit(amount);
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " made a deposit to Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(0).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " deposited $" + amount + " to Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Checking balance is $" + cx.account.get(0).getBalance());
                         log(logOutput);
                         break;
                     case 2: // Savings Account
                         cx.account.get(1).deposit(amount);
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " made a deposit to Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(1).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " deposited $" + amount + " to Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Savings balance is $" + cx.account.get(1).getBalance());
                         log(logOutput);
                         break;
                     case 3: // Credit Account
                         cx.account.get(2).deposit(amount);
                         System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " made a deposit to Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " deposited $" + amount + " to Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Credit balance is $" + cx.account.get(2).getBalance());
                         log(logOutput);
                         break;
                     default:
@@ -221,7 +225,6 @@ public class RunBank {
             System.out.println("Which account would you like to make a withdrawal from?");
             System.out.println("1. Checking Account");
             System.out.println("2. Savings Account");
-            System.out.println("3. Credit Account");
             System.out.print("Enter your choice: ");
             String input = sc.next();
             try {
@@ -239,12 +242,6 @@ public class RunBank {
                         cx.account.get(1).withdraw(amount);
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(1).getBalance());
-                        log(logOutput);
-                        break;
-                    case 3: // Credit Account
-                        cx.account.get(2).withdraw(amount);
-                        System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
                         log(logOutput);
                         break;
                     default:
@@ -308,13 +305,15 @@ public class RunBank {
                     case 1: // Checking Account
                         verifyPayment(cx, 0, amount);
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " Made payment from Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
+                        System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " Made payment from Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Credit balance is $" + cx.account.get(2).getBalance());
                         log(logOutput);
                         break;
                     case 2: // Savings Account
                         verifyPayment(cx, 1, amount);
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " Made payment from Savings-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(2).getBalance());
+                        System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
+                        logOutput = (cx.firstName + " " + cx.lastName + " Made payment from Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Credit balance is $" + cx.account.get(2).getBalance());
                         log(logOutput);
                         break;
                     default:
@@ -397,14 +396,14 @@ public class RunBank {
                                     cx.account.get(0).withdraw(amount);
                                     account.deposit(amount);
                                     System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
-                                    logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Checking-" + cx.account.get(0).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account " + account.getAccountNumber();
+                                    logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Checking-" + cx.account.get(0).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account \n" + account.getAccountNumber();
                                     log(logOutput);
                                     break;
                                 case 2: // Savings Account
                                     cx.account.get(1).withdraw(amount);
                                     account.deposit(amount);
                                     System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
-                                    logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Savings-" + cx.account.get(1).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account " + account.getAccountNumber();
+                                    logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Savings-" + cx.account.get(1).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account \n" + account.getAccountNumber();
                                     log(logOutput);
                                     break;
                                 default:
@@ -431,25 +430,31 @@ public class RunBank {
     /**
      * Displays the admin menu and allows the admin to inquire about a customer's account.
      * 
-     * @param customers the array of customers in the database
+     * @param customers the map of customers in the database
      */
     public static void adminMenu(Map<String, Customer> customers) {
         String logOutput;
         Scanner sc = new Scanner(System.in);
-        boolean found = false;
+        boolean exit = false;
         System.out.println("Admin Console");
-    
-        while (!found) { // Loop until the customer is found
-            System.out.print("Which account would you like to inquire about? Enter the name of the account holder: ");
+        Credit creditAccount = new Credit("000000000", 1000, 0);
+
+        while (!exit) {
+            System.out.print("\nWhich account would you like to inquire about?\nEnter the name of the account holder: ");
             String input = sc.nextLine().trim();
-    
-            try {
+
+            if (input.equalsIgnoreCase("EXIT")) {
+                System.out.println("\nThank you for choosing El Paso Miners Bank. Goodbye!\n");
+                exit = true;
+            } else {
+                boolean found = false;
                 for (Customer cx : customers.values()) {
                     String fullName = cx.firstName + " " + cx.lastName;
                     if (fullName.equalsIgnoreCase(input)) { // Check if the customer is found
                         found = true;
                         // Display the customer's information
-                        System.out.println("Customer Details:");
+                        System.out.println("\nCustomer Details:");
+                        System.out.println("--------------------");
                         System.out.println("ID: " + cx.getCustomerID());
                         System.out.println("Name: " + cx.firstName + " " + cx.lastName);
                         System.out.println("DOB: " + cx.DOB);
@@ -460,19 +465,31 @@ public class RunBank {
                         System.out.println("Savings Account Number: " + cx.account.get(1).getAccountNumber());
                         System.out.println("Savings Balance: " + cx.account.get(1).getBalance());
                         System.out.println("Credit Account Number: " + cx.account.get(2).getAccountNumber());
-                        System.out.println("Credit Max: " + cx.account.get(2).getCreditMax());
+                        System.out.println("Credit Max: " + creditAccount.getCreditMax());
                         System.out.println("Credit Balance: " + cx.account.get(2).getBalance());
                         logOutput = ("Admin made an account inquiry on " + cx.firstName + " " + cx.lastName + "'s accounts. " + cx.firstName + " " + cx.lastName + "'s Checking balance is $" + cx.account.get(0).getBalance() + ", Savings balance is $" + cx.account.get(1).getBalance() + ", and Credit balance is $" + cx.account.get(2).getBalance());
                         log(logOutput);
-                        System.exit(0);
+
+                        // Ask the admin if they would like to inquire about another account
+                        System.err.println("\nWould you like to inquire about another account? (yes/no)");
+                        String choice = sc.nextLine().trim();
+                        if (choice.equalsIgnoreCase("no")) {
+                            // Ask if they would like to sign in as a customer or exit the program
+                            System.err.println("\nWould you like to go back to the main menu or exit the program? (main menu/exit)");
+                            String userChoice = sc.nextLine().trim();
+                            if (userChoice.equalsIgnoreCase("main menu") || userChoice.equalsIgnoreCase("menu")) {
+                                askUserRole(customers);
+                            } else if (userChoice.equalsIgnoreCase("exit")) {
+                                System.out.println("\nThank you for choosing El Paso Miners Bank. Goodbye!\n");
+                                exit = true;
+                            }
+                        }
+                        break; // Break out of the loop after handling the found customer
                     }
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("\nInvalid choice. Please try again.\n");
-            }
-    
-            if (!found) {
-                System.out.println("Customer not found. Please try again.");
+                if (!found) {
+                    System.out.println("Customer not found. Please try again.");
+                }
             }
         }
     }
@@ -480,7 +497,7 @@ public class RunBank {
     /**
      * Asks the user for their role and performs actions based on the role.
      *
-     * @param customerDB the array of customers in the database
+     * @param customerDB the map of customers in the database
      */
     public static void askUserRole(Map<String, Customer> customers) {
         Scanner sc = new Scanner(System.in);
@@ -490,13 +507,18 @@ public class RunBank {
         System.out.print("Enter your choice: ");
         String input = sc.next();
         try {
+            if (input.equalsIgnoreCase("EXIT")) {
+                System.out.println("\nThank you for choosing El Paso Miners Bank. Goodbye!\n");
+                System.exit(0);
+            }
             int choice = Integer.parseInt(input);
             switch (choice) {
                 case 1: // Admin
                     adminMenu(customers);
                     break;
                 case 2: // Customer
-                    break;
+                    // Return to the main method
+                    return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     askUserRole(customers);
@@ -520,7 +542,12 @@ public class RunBank {
                 file.createNewFile();
             }
             FileWriter writer = new FileWriter(file, true);
-            writer.write(message + "\n");
+
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedDateTime = now.format(formatter);
+
+            writer.write("[" + formattedDateTime + "] " + message + "\n");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -530,12 +557,13 @@ public class RunBank {
     /**
      * Writes the updated balances of all customers to a CSV file.
      *
-     * @param customers the array of customers to write to the CSV file
+     * @param customers the map of customers to write to the CSV file
      */
     private static void writeBalancesToCSV(Map<String, Customer> customers) throws IOException {
         FileWriter writer = new FileWriter("updated_balances.csv");
         writer.write("Identification Number,First Name,Last Name,Date of Birth,Address,Phone Number,Checking Account Number,Checking Balance,Savings Account Number,Savings Balance,Credit Account Number,Credit Max,Credit Balance\n");
         for (Customer cx : customers.values()) {
+            Credit creditAccount = cx.getCreditMax();
             writer.write(cx.getCustomerID() + "," +
                          cx.firstName + "," +
                          cx.lastName + "," +
@@ -547,10 +575,9 @@ public class RunBank {
                          cx.account.get(1).getAccountNumber() + "," +
                          cx.account.get(1).getBalance() + "," +
                          cx.account.get(2).getAccountNumber() + "," +
-                         cx.account.get(2).getCreditMax() + "," +
+                         creditAccount.getCreditMax() + "," +
                          cx.account.get(2).getBalance() + "\n");
         }
         writer.close();
     }
 }
-

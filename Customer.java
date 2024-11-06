@@ -22,7 +22,7 @@ public class Customer extends Person {
     public Customer(String customerID,String firstName, String lastName, String address, String DOB, String phoneNumber) {
         super(firstName, lastName, address, DOB, phoneNumber);
         this.customerID = customerID;
-        this.account = new ArrayList<Account>(); // Initialize the account list correctly 
+        this.account = new ArrayList<Account>(); // Initialize the account list correctly
     }
 
     /**
@@ -76,5 +76,20 @@ public class Customer extends Person {
                 return cx;
             }
             throw new IllegalArgumentException("We do not recognize this account number, please try again");
+    }
+
+    /**
+     * Retrieves the credit account of the customer.
+     * 
+     * @return the Credit account if found
+     * @throws IllegalArgumentException if the customer has no credit account
+     */
+    public Credit getCreditMax() {
+        for (Account acc : this.account) {
+            if (acc instanceof Credit) {
+                return (Credit) acc;
+            }
+        }
+        throw new IllegalArgumentException("You do not have a credit account with us");
     }
 }
