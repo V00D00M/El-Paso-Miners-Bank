@@ -35,11 +35,7 @@ public abstract class Account {
      *
      * @return the balance
      */
-<<<<<<< HEAD
     public double getBalance() { return balance; } 
-=======
-    public double getBalance() { return balance; }
->>>>>>> 1d7c28c30864df1de96d92aa9ce8f752cb3efc27
 
     /**
      * Deposits the specified amount into the account.
