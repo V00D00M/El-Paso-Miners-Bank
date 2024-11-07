@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The Customer class represents a customer with a unique ID and a list of accounts.
@@ -21,7 +22,7 @@ public class Customer extends Person {
     public Customer(String customerID,String firstName, String lastName, String address, String DOB, String phoneNumber) {
         super(firstName, lastName, address, DOB, phoneNumber);
         this.customerID = customerID;
-        this.account = new ArrayList<Account>(); // Initialize the account list correctly 
+        this.account = new ArrayList<Account>(); // Initialize the account list correctly
     }
 
     /**
@@ -65,16 +66,30 @@ public class Customer extends Person {
      * Retrieves the logged-in customer by their identification number.
      *
      * @param identificationNumber the identification number to search for
-     * @param customerArr the array of customers to search in
+     * @param customerMap the array of customers to search in
      * @return the Customer object if found
      * @throws IllegalArgumentException if the customer is not found
      */
-    public Customer getLoggedInUser(String identificationNumber, Customer[] customerArr) {
-        for (Customer cx : customerArr) {
+    public Customer getLoggedInUser(String identificationNumber, Map<String, Customer> customerMap) {
+        Customer cx = customerMap.get(identificationNumber);
             if (cx.getCustomerID().equals(identificationNumber)) {
                 return cx;
             }
+            throw new IllegalArgumentException("We do not recognize this account number, please try again");
+    }
+
+    /**
+     * Retrieves the credit account of the customer.
+     * 
+     * @return the Credit account if found
+     * @throws IllegalArgumentException if the customer has no credit account
+     */
+    public Credit getCreditMax() {
+        for (Account acc : this.account) {
+            if (acc instanceof Credit) {
+                return (Credit) acc;
+            }
         }
-        throw new IllegalArgumentException("We do not recognize this account number, please try again");
+        throw new IllegalArgumentException("You do not have a credit account with us");
     }
 }

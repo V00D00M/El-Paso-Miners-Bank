@@ -30,18 +30,24 @@ public class Credit extends Account {
             balance += amount;
         }
     }
+
+    public void withdraw(double amount) {
+        System.out.println("Withdrawals are not allowed from a credit account.");
+    }
     
     /**
-     * Withdraws the specified amount from the credit account if sufficient funds are available.
+     * Makes a payment to the credit account.
      *
-     * @param amount the amount to withdraw
+     * @param amount the amount to pay
      */
-    public void withdraw(double amount) {
-        if (balance >= amount) {
+    public void makePayment(double amount) {
+        if (amount > 0) {
             balance -= amount;
-        }
-        else {
-            System.out.println("Insufficient funds to withdraw $" + amount);
+            if (balance < 0) {
+                balance = 0;
+            }
+        } else {
+            System.out.println("Invalid payment amount");
         }
     }
 

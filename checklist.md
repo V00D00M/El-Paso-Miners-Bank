@@ -1,11 +1,21 @@
-1. Remake UML Diagrams to include previous methods, along with making them Lv. 2
-2. Reformat data structure for CSVReader's returns
-3. Create TransactionReader
-4. Figure out what the fuck and interface is
-    * possibly interfaces can add functionality that can print to logs depending on inquiry, deposit, etc.
-5. Use a design pattern: research which design pattern we need to use
-6. Create new bank user
-    * Make a random id number & credit limit
-7. Add transaction functionality to Bank Manager method
-8. Add date and time to log/transaction file
-9. Make a bank statement file
+- [ ] Remake UML Diagrams to include previous methods, along with making them Lv. 2, and adding new use case classes based on part B
+- [x] Reformat data structure for CSVReader's returns
+- [x] Create TransactionReader
+  - [ ] Finalize funcitonality
+  - [ ] Add transaction functionality to Bank Manager method
+- [ ] Figure out what the fuck and interface is
+- [ ] Use a design pattern: research which design pattern we need to use
+- [ ] Create new bank user
+  - [ ] Ask user to input all information: Name, DOB, Address, City, State, Zip, and Phone Number.
+  - [ ] Give users a checking, savings and credit account with their own unique IDs
+    - [ ] Give users ID incrementing from last biggest ID number in database
+  - [ ] Give users a credit limit using the table in instructions
+- [x] Add date and time to log/transaction file
+- [ ] Make a bank statement file (look up what a bank statement file is for formatting purposes)
+  - Add this to the admin method to add transactions
+- [ ] Make a user transactions file
+  - [ ] Account Information 
+  - [ ] Starting Balance (You can assume beginning of session) 
+  - [ ] Ending Balance (At the time requested) 
+  - [ ] All transactions for that person
+  - [ ] Date of Statement (date of running the code)
