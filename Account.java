@@ -3,13 +3,13 @@
  * This class is abstract and cannot be instantiated directly.
  */
 public abstract class Account {
-    protected double balance;
-    protected String accountNumber;
-    private int creditMax;
+    private double balance; /// make private to enforce stricter encapsulation. 
+    private String accountNumber; /// make private to enforce stricter encapsulation. // if set only during construction and doesn't need to change than set to final
+    private int creditMax;  // if set only during construction and doesn't need to change than set to final 
 
     /**
      * Constructs a new Account with the specified account number and balance.
-     *
+     * 
      * @param accountNumber the account number of the account
      * @param balance the initial balance of the account
      */
@@ -43,7 +43,7 @@ public abstract class Account {
      *
      * @return the balance
      */
-    public double getBalance() { return balance; }
+    public double getBalance() { return balance; } 
 
     /**
      * Gets the maximum credit limit of the account.
@@ -74,7 +74,7 @@ public abstract class Account {
      */
     public double getBalance(double balance) {
         return balance;
-    }
+    }   /// The existent getbalance() method without parameters already retrieves the balance field
 
     /**
      * Sets the balance of the account.
@@ -86,11 +86,11 @@ public abstract class Account {
     }
 
     /**
-     * Sets the balance of the account.
+     * Sets the account number of the account.
      *
-     * @param balance the new balance of the account
+     * @param balance the new account number
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
+    } ///Changed names 
 }
