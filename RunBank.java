@@ -479,6 +479,7 @@ public class RunBank {
                             String userChoice = sc.nextLine().trim();
                             if (userChoice.equalsIgnoreCase("main menu") || userChoice.equalsIgnoreCase("menu")) {
                                 askUserRole(customers);
+                                exit = true;
                             } else if (userChoice.equalsIgnoreCase("exit")) {
                                 System.out.println("\nThank you for choosing El Paso Miners Bank. Goodbye!\n");
                                 exit = true;
