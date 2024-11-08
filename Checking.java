@@ -1,7 +1,7 @@
 /**
  * The Checking class represents a checking account.
  */
-public class Checking extends Account {
+public class Checking extends Account implements Transaction{
 
     /**
      * Constructs a new Checking account with the specified account number and balance.
@@ -18,6 +18,7 @@ public class Checking extends Account {
      *
      * @param amount the amount to deposit
      */
+    @Override
     public void deposit(double amount) {
         balance += amount;
     }
@@ -28,6 +29,7 @@ public class Checking extends Account {
      *
      * @param amount the amount to withdraw
      */
+    @Override
     public void withdraw(double amount) {
         if (balance > amount) {
             balance -= amount;
@@ -35,7 +37,5 @@ public class Checking extends Account {
         else {
             System.out.println("Insufficient funds to withdraw $" + amount);
         }
-
-    
-}    
+    }    
 }
