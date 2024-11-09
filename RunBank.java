@@ -25,6 +25,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.time.LocalDateTime;
@@ -77,7 +78,6 @@ public class RunBank {
             System.out.println("5. Make a Payment");
             System.out.println("Exit\n");
             System.out.print("Enter your choice: ");
-
             String input = sc.next();
 
             // Ask the user for their choice
@@ -119,6 +119,59 @@ public class RunBank {
             }
         }
         writeBalancesToCSV(customerDB);
+    }
+
+    public static void CreateAccount(Customer cx, Map<String, Customer> customerDB){
+        Scanner sc = new Scanner(System.in);
+        boolean exit = false;
+        String logOutput = "";
+        System.out.println("\nThanks for choosing to create an account with us!");
+        System.out.println("Please enter your first name: ");
+        String firstName = sc.next();
+        System.out.println("Please enter your last name: ");
+        String lastName = sc.next();
+        System.out.println("Please enter your date of birth: ");
+        String DOB = sc.next();
+        System.out.println("Please enter your address. Insert it in this format: ");
+        System.out.println("Street Address, City, State, Zip Code");
+        System.out.println("Address: ");
+        String address = sc.next();
+        System.out.println("City: ");
+        String city = sc.next();
+        System.out.println("State: ");
+        String state = sc.next();
+        System.out.println("Zip code: ");
+        String zip = sc.next();
+        System.out.println("Phone Number: ");
+        String phoneNumber = sc.next();
+        System.out.println("Please enter your initial deposit amount: ");
+        double initialDeposit = sc.nextDouble();
+        System.out.println("Please enter your credit score: ");
+        int creditScore = sc.nextInt();
+
+        BankUser newUser = new BankUser(firstName + " " + lastName, DOB, address, city, state, zip, phoneNumber, creditScore);
+    
+        // Save the new user to the CSV file
+        try {
+            List<BankUser> users = BankUser.loadUsersFromCSV("CS 3331 - Bank Users.csv");
+            users.add(newUser);
+            BankUser.saveUsersToCSV(users, "CS 3331 - Bank Users.csv");
+        } catch (IOException e) {
+            System.out.println("Error saving user to CSV: " + e.getMessage());
+        }
+
+        // Log the account creation
+        logOutput = ("New account created for " + newUser.getName() + ". " + newUser.getName() + "'s Checking account number is " + newUser.getCheckingAccountNumber() + ", Savings account number is " + newUser.getSavingsAccountNumber() + ", and Credit card account number is " + newUser.getCreditCardAccountNumber());
+        log(logOutput);
+
+        System.out.println("Account created successfully!");
+
+        // Ask the user if they would like to log in
+        System.out.println("Would you like to log in to your account? (yes/no)");
+        String choice = sc.next();
+        if (choice.equalsIgnoreCase("yes")) {
+            exit = true;
+        }
     }
 
     /**
@@ -505,6 +558,7 @@ public class RunBank {
         System.out.println("Are you an Admin or a Customer?");
         System.out.println("1. Admin");
         System.out.println("2. Customer");
+        System.out.println("3. Create a new account");
         System.out.print("Enter your choice: ");
         String input = sc.next();
         try {
@@ -520,6 +574,8 @@ public class RunBank {
                 case 2: // Customer
                     // Return to the main method
                     return;
+                case 3: // Create a new account
+
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     askUserRole(customers);
