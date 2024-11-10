@@ -3,9 +3,14 @@
  * This class is abstract and cannot be instantiated directly.
  */
 public abstract class Account {
+<<<<<<< HEAD
     protected double balance; /// make private to enforce stricter encapsulation. 
     private String accountNumber; /// make private to enforce stricter encapsulation. // if set only during construction and doesn't need to change than set to final
     private int creditMax;  // if set only during construction and doesn't need to change than set to final 
+=======
+    protected double balance;
+    protected String accountNumber;
+>>>>>>> 40975d41dd18bc6905694f19a2fae721032ad017
 
     /**
      * Constructs a new Account with the specified account number and balance.
