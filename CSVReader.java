@@ -3,15 +3,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * The CSVReader class provides functionality to read customer data from a CSV file
  * and create Customer objects.
  */
 public class CSVReader {
-    private Scanner CSVReader;
-
     /**
      * Default constructor for CSVReader.
      */

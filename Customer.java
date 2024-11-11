@@ -19,7 +19,7 @@ public class Customer extends Person {
      * @param DOB the date of birth of the customer
      * @param phoneNumber the phone number of the customer
      */
-    public Customer(String customerID,String firstName, String lastName, String address, String DOB, String phoneNumber) {
+    public Customer(String customerID, String firstName, String lastName, String address, String DOB, String phoneNumber) {
         super(firstName, lastName, address, DOB, phoneNumber);
         this.customerID = customerID;
         this.account = new ArrayList<>();
@@ -43,6 +43,15 @@ public class Customer extends Person {
         }
         System.out.println(accountNumber);
         throw new IllegalArgumentException("We do not recognize this account number, please try again"); // Throw exception if not found
+    }
+
+    /**
+     * Retrieves the list of accounts.
+     *
+     * @return the list of accounts
+     */
+    public List<Account> getAccounts() {
+        return account;
     }
 
     /**
