@@ -1,7 +1,7 @@
 /**
  * The Checking class represents a checking account.
  */
-public class Checking extends Account implements Transaction{
+public class Checking extends Account implements AccountOperations{
 
     /**
      * Constructs a new Checking account with the specified account number and balance.
@@ -20,7 +20,11 @@ public class Checking extends Account implements Transaction{
      */
     @Override
     public void deposit(double amount) {
-        balance += amount;
+        if (amount > 0) {
+            balance += amount;
+        } else {
+            System.out.println("Deposit amount must be positive.");
+        }
     }
     
 
@@ -31,11 +35,24 @@ public class Checking extends Account implements Transaction{
      */
     @Override
     public void withdraw(double amount) {
-        if (balance > amount) {
-            balance -= amount;
+        if (amount > 0) {
+            if (balance >= amount) {
+                balance -= amount;
+            } else {
+                System.out.println("Insufficient funds to withdraw $" + amount);
+            }
+        } else {
+            System.out.println("Withdrawal amount must be positive.");
         }
-        else {
-            System.out.println("Insufficient funds to withdraw $" + amount);
-        }
-    }    
+    }
+    
+    /**
+     * Returns the current balance of the checking account.
+     *
+     * @return the current balance
+     */
+    @Override
+    public double getBalance() {
+        return balance;
+    }
 }

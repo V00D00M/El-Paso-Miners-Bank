@@ -1,0 +1,9 @@
+[2024-11-10 23:05:00] Simba Disney transferred $30.0 from Savings-2011 to Checking-1011
+[2024-11-10 23:12:13] Simba Disney Made payment from Savings-2011. Simba Disney's Credit balance is $-1170.11
+[2024-11-10 23:12:30] Simba Disney made a balance inquiry on Checking-1011. Simba Disney's balance is $1366.79
+[2024-11-10 23:12:37] Simba Disney withdrew money from Savings-2011. Simba Disney's balance is $243.47000000000003
+[2024-11-10 23:15:29] Simba Disney withdrew money from Savings-2011. Simba Disney's balance is $363
+[2024-11-10 23:15:51] Simba Disney withdrew money from Savings-2011. Simba Disney's balance is $323
+[2024-11-10 23:16:50] Simba Disney withdrew money from Savings-2011. Simba Disney's balance is $323
+[2024-11-10 23:20:42] Simba Disney withdrew money from Savings-2011. Simba Disney's balance is $323.47
+[2024-11-10 23:20:51] Simba Disney withdrew money from Checking-1011. Simba Disney's balance is $1286.79

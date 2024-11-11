@@ -1,9 +1,8 @@
 /**
  * The Credit class represents a credit account with a maximum credit limit.
  */
-public class Credit extends Account implements interestBearing{
+public class Credit extends Account implements AccountOperations{
     private int creditMax;
-    private double interestRate; //Assume we have an interest rate for the credit account
     
     /**
      * Constructs a new Credit account with the specified account number, credit limit, and balance.
@@ -11,12 +10,10 @@ public class Credit extends Account implements interestBearing{
      * @param accountNumber the account number of the credit account
      * @param creditMax the maximum credit limit of the account
      * @param balance the initial balance of the credit account
-     * @param interestRate the interest rate for the credit account
      */
-    public Credit(String accountNumber, int creditMax, double balance, double interestRate) {
+    public Credit(String accountNumber, int creditMax, double balance) {
         super(accountNumber, balance);
         this.creditMax = creditMax;
-        this.interestRate = interestRate;
     }
     
     /**
@@ -61,16 +58,5 @@ public class Credit extends Account implements interestBearing{
      */
     public int getCreditMax(){
         return this.creditMax;
-    }
-
-    /**
-     * Calculates interest for the credit account
-     */
-    @Override
-    public void calculateInterest() {
-        //Apply interest to the current balance 
-        double interest = balance * interestRate;
-        balance = balance + interest;
-
     }
 }

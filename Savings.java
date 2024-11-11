@@ -1,9 +1,7 @@
-public class Savings extends Account implements Transaction, interestBearing{
-    private double interestRate; //Ex: 0.03 for 3%
+public class Savings extends Account implements AccountOperations{
 
-    public Savings(String accountNumber, double balance, double interestRate) {
+    public Savings(String accountNumber, double balance) {
         super(accountNumber, balance);
-        this.interestRate = interestRate;
     }
 
     @Override
@@ -19,12 +17,4 @@ public class Savings extends Account implements Transaction, interestBearing{
             System.out.println("Insufficient funds to withdraw $" + amount);
         }
     }
-
-    @Override
-    public void calculateInterest() {
-        double interest = balance * interestRate;
-        balance += interest;
-        System.out.println("Interest added: $" + interest + "New balance: $" + balance);
-    }
-
 }

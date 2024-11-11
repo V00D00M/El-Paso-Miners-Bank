@@ -18,17 +18,14 @@ would best fit with our needs for a database and making logs for each interactio
 depositing money, transferring money, etc. and having that log be written onto a file that would be appended to. 
 Overall we were to be given a description and implement a banking system that would fit the specifications we were given.*/
 
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.time.LocalDateTime;
+import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -65,7 +62,7 @@ public class RunBank {
 
         // Get the logged in user
         loggedInUser = loggedInUser.getLoggedInUser(identificationNumber, customerDB);
-        System.out.println("Welcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
+        System.out.println("\nWelcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
         //Start of the program
         while (!exit) {
         // Logs the user in and gets the user's information
@@ -161,7 +158,7 @@ public class RunBank {
         }
 
         // Log the account creation
-        logOutput = ("New account created for " + newUser.getName() + ". " + newUser.getName() + "'s Checking account number is " + newUser.getCheckingAccountNumber() + ", Savings account number is " + newUser.getSavingsAccountNumber() + ", and Credit card account number is " + newUser.getCreditCardAccountNumber());
+        logOutput = "New account created for " + firstName + " " + lastName + ". Checking account number is " + newUser.getCheckingAccountNumber() + ", Savings account number is " + newUser.getSavingsAccountNumber() + ", and Credit card account number is " + newUser.getCreditCardAccountNumber();
         log(logOutput);
 
         System.out.println("Account created successfully!");
@@ -224,17 +221,26 @@ public class RunBank {
     public static void DepositMenu(Customer cx) {
         Scanner sc = new Scanner(System.in);
         String logOutput = "";
-        System.out.println("Which account would you like to make a deposit to?");
-        try {
+        boolean validChoice = false;
+    
+        while (!validChoice) {
+            System.out.println("Which account would you like to make a deposit to?");
             System.out.println("1. Checking Account");
             System.out.println("2. Savings Account");
             System.out.println("3. Credit Account");
             System.out.print("Enter your choice: ");
             String input = sc.next();
+    
             try {
                 int choice = Integer.parseInt(input);
+                if (choice < 1 || choice > 3) {
+                    System.out.println("Invalid choice. Please try again.");
+                    continue;
+                }
+    
                 System.out.print("Enter the amount you would like to deposit: $");
                 double amount = sc.nextDouble();
+    
                 switch (choice) {
                     case 1: // Checking Account
                         cx.account.get(0).deposit(amount);
@@ -258,12 +264,11 @@ public class RunBank {
                         System.out.println("Invalid choice. Please try again.");
                         break;
                 }
+                validChoice = true;
             } catch (NumberFormatException e) {
                 System.out.println("\nInvalid choice. Please try again.\n");
             }
-        } catch (NumberFormatException e) {
-            System.out.println("\nInvalid choice. Please try again.\n");
-        } 
+        }
     }
 
     /**
@@ -274,6 +279,10 @@ public class RunBank {
     public static void WithdrawMenu(Customer cx) {
         Scanner sc = new Scanner(System.in);
         String logOutput = "";
+
+        // Format the balance to two decimal places
+        DecimalFormat df = new DecimalFormat("#.##");
+        
         try {
             System.out.println("Which account would you like to make a withdrawal from?");
             System.out.println("1. Checking Account");
@@ -293,8 +302,8 @@ public class RunBank {
                         break;
                     case 2: // Savings Account
                         cx.account.get(1).withdraw(amount);
-                        System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(1).getBalance());
+                        System.out.println("Savings Account Balance: $" + df.format(cx.account.get(1).getBalance()));
+                        logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + df.format(cx.account.get(1).getBalance()));
                         log(logOutput);
                         break;
                     default:
@@ -577,7 +586,7 @@ public class RunBank {
                 case 3: // Create a new account
 
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid choice. Please try again.\n");
                     askUserRole(customers);
                     break;
             }

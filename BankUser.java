@@ -33,6 +33,18 @@ class BankUser {
         this.creditLimit = generateCreditLimit(creditScore);
     }
 
+    public String getSavingsAccountNumber() {
+        return savingsAccountNumber;
+    }
+
+    public String getCheckingAccountNumber() {
+        return checkingAccountNumber;
+    }
+
+    public String getCreditCardAccountNumber() {
+        return creditCardAccountNumber;
+    }
+
     private String generateAccountNumber() {
         // Generate a random 4-digit number for the account numbers
         return String.format("%04d", random.nextInt(9999));
