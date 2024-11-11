@@ -5,7 +5,7 @@
 public abstract class Account {
     protected double balance; /// make private to enforce stricter encapsulation. 
     protected String accountNumber; /// make private to enforce stricter encapsulation. // if set only during construction and doesn't need to change than set to final
-
+    
     /**
      * Constructs a new Account with the specified account number and balance.
      * 

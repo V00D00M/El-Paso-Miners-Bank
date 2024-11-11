@@ -1,6 +1,6 @@
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * The Customer class represents a customer with a unique ID and a list of accounts.
@@ -22,7 +22,7 @@ public class Customer extends Person {
     public Customer(String customerID,String firstName, String lastName, String address, String DOB, String phoneNumber) {
         super(firstName, lastName, address, DOB, phoneNumber);
         this.customerID = customerID;
-        this.account = new ArrayList<Account>(); // Initialize the account list correctly
+        this.account = new ArrayList<>();
     }
 
     /**
@@ -41,6 +41,7 @@ public class Customer extends Person {
                 return acc; // Return the account if found
             }
         }
+        System.out.println(accountNumber);
         throw new IllegalArgumentException("We do not recognize this account number, please try again"); // Throw exception if not found
     }
 
@@ -58,8 +59,8 @@ public class Customer extends Person {
      *
      * @param populateAcc the account to add
      */
-    public void popAccList(Account populateAcc){
-        this.account.add(populateAcc);
+    public void addAccount(Account account){
+        this.account.add(account);
     }
     
     /**
@@ -70,8 +71,12 @@ public class Customer extends Person {
      * @return the Customer object if found
      * @throws IllegalArgumentException if the customer is not found
      */
-    public Customer getLoggedInUser(String identificationNumber, Map<String, Customer> customerMap) {
+    public static Customer getLoggedInUser(String identificationNumber, Map<String, Customer> customerMap) {
         Customer cx = customerMap.get(identificationNumber);
+            if(cx == null){
+                throw new IllegalArgumentException("We do not recognize this account number, please try again");
+            }    
+
             if (cx.getCustomerID().equals(identificationNumber)) {
                 return cx;
             }

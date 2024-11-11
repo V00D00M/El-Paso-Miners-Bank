@@ -47,22 +47,31 @@ public class RunBank {
         //CSVReader csvReader = new CSVReader();
         CSVReader csvReader = new CSVReader();
         //logged in user is used as a pointer value of type customer, will be fully initialized when user logs in
-        Customer loggedInUser = new Customer("","","","","","");
+        //Customer loggedInUser = new Customer("","","","","","");
         // Customer hashmap that will hold all the customers in the database
         Map<String, Customer> customerDB = csvReader.getCustomers("CS 3331 - Bank Users.csv");
 
         String identificationNumber = "";
         boolean exit = false;
+        Customer loggedInUser = null;
 
         System.out.flush();
         askUserRole(customerDB);
 
-        System.out.print("Please enter your ID number:");
-        identificationNumber = sc.next();
+        while (true) {
+            System.out.print("Please enter your ID number: ");
+            identificationNumber = sc.next();
 
-        // Get the logged in user
-        loggedInUser = loggedInUser.getLoggedInUser(identificationNumber, customerDB);
-        System.out.println("\nWelcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
+            // Get the logged in user
+            loggedInUser = Customer.getLoggedInUser(identificationNumber, customerDB);
+            if (loggedInUser == null) {
+                System.out.println("Invalid ID number. Please try again.");
+            } else {
+                System.out.println("\nWelcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
+                break;
+            }
+        }
+
         //Start of the program
         while (!exit) {
         // Logs the user in and gets the user's information
