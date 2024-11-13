@@ -101,6 +101,7 @@ class BankUser {
     public void toCSV(List<BankUser> users, String filePath) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             for (BankUser user : users) {
+                writer.newLine();
                 writer.write(String.join(",", 
                     String.valueOf(user.getUserId()), 
                     user.getFirstName(), 
@@ -109,14 +110,13 @@ class BankUser {
                     user.getAddress(), 
                     user.getPhoneNumber(), 
                     String.valueOf(user.getCheckingAccountNumber()),
-                    String.valueOf(0),
+                    String.valueOf(100),
                     String.valueOf(user.getSavingsAccountNumber()),
-                    String.valueOf(0),
+                    String.valueOf(100),
                     String.valueOf(user.getCreditAccountNumber()), 
                     String.valueOf(user.getCreditLimit()),
-                    String.valueOf(0)
+                    String.valueOf(-100)
                 ));
-                writer.newLine();
             }
         }
     }
