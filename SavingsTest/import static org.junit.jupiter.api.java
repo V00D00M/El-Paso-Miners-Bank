@@ -1,15 +1,13 @@
-package SavingsTest;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+package SavingsTest;
 
-public class SavingsTest {
+
+public class javaTest {
 
     private Savings savingsAccount;
 
@@ -44,12 +42,8 @@ public class SavingsTest {
 
         savingsAccount.withdraw(1500.00);  // Attempt withdrawal with insufficient funds
 
-        // Check that the error message is printed
-        assertTrue(outContent.toString().contains("Insufficient funds to withdraw"), 
-                "Expected 'Insufficient funds' message to be printed");
-
-        // Balance should remain unchanged at 1000.00
         assertEquals(1000.00, savingsAccount.getBalance(), "Balance should remain 1000.00 after failed withdrawal");
+        assertTrue(outContent.toString().contains("Insufficient funds"), "Should print 'Insufficient funds' message");
     }
 
     @Test
