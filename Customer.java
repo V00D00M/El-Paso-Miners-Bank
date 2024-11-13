@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class Customer extends Person {
     protected String customerID;
+    protected int creditScore;
     protected List<Account> account;
 
     /**
@@ -22,6 +23,7 @@ public class Customer extends Person {
     public Customer(String customerID, String firstName, String lastName, String address, String DOB, String phoneNumber) {
         super(firstName, lastName, address, DOB, phoneNumber);
         this.customerID = customerID;
+        this.creditScore = creditScore;
         this.account = new ArrayList<>();
     }
 
@@ -61,6 +63,15 @@ public class Customer extends Person {
      */
     public String getCustomerID() {
         return customerID;
+    }
+
+    /**
+     * Gets the credit score of the customer.
+     *
+     * @return the credit score
+     */
+    public int getCreditScore() {
+        return creditScore;
     }
 
     /**

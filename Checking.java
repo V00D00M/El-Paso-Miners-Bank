@@ -26,7 +26,6 @@ public class Checking extends Account implements AccountOperations{
             System.out.println("Deposit amount must be positive.");
         }
     }
-    
 
     /**
      * Withdraws the specified amount from the checking account if sufficient funds are available.

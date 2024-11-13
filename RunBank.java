@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -48,9 +47,6 @@ public class RunBank {
 
         //CSVReader csvReader = new CSVReader();
         CSVReader csvReader = new CSVReader();
-        //logged in user is used as a pointer value of type customer, will be fully initialized when user logs in
-        //Customer loggedInUser = new Customer("","","","","","");
-        // Customer hashmap that will hold all the customers in the database
         Map<String, Customer> customerDB = csvReader.getCustomers("CS 3331 - Bank Users.csv");
 
         String identificationNumber = "";
@@ -132,10 +128,11 @@ public class RunBank {
         }
     }
 
-    public static void CreateAccount(Customer cx, Map<String, Customer> customerDB){
+    public static void CreateAccount(Customer cx, Map<String, Customer> customerDB) {
         Scanner sc = new Scanner(System.in);
         boolean exit = false;
         String logOutput = "";
+        try {
         System.out.println("\nThanks for choosing to create an account with us!");
         System.out.println("Please enter your first name: ");
         String firstName = sc.next();
@@ -147,37 +144,47 @@ public class RunBank {
         System.out.println("Please enter your street address: ");
         System.out.println("Enter your information in this format: street address, city, state(TX) zip code");
         String address = sc.nextLine();
+        String addressQuotes = "\"" + address + "\"";
         System.out.println("Please enter your phone number: ");
         String phoneNumber = sc.next();
         System.out.println("Please enter your credit score: ");
         int creditScore = sc.nextInt();
-
+    
         List<BankUser> newUserList = new ArrayList<>();
-        BankUser newUser = new BankUser(firstName, lastName, DOB, address, phoneNumber, creditScore);
-        newUserList.add(newUser);
-
-        // Save the new user to the CSV file
-        try {
+            BankUser.updateLastNumbersFromCSV("CS 3331 - Bank Users.csv");
+            BankUser newUser = new BankUser(
+                BankUser.lastUserId,
+                firstName,
+                lastName,
+                DOB,
+                addressQuotes,
+                phoneNumber,
+                BankUser.lastCheckingAccountNumber,
+                BankUser.lastSavingsAccountNumber,
+                BankUser.lastCreditAccountNumber,
+                creditScore
+            );
+            newUserList.add(newUser);
+    
+            // Save the new user to the CSV file
             BankUser bankUserInstance = new BankUser();
             bankUserInstance.toCSV(newUserList, "CS 3331 - Bank Users.csv");
-        } catch (IOException e) {
-            System.out.println("Error saving user to CSV: " + e.getMessage());
-        }
-
+            System.out.println("New user created and saved to CSV successfully.");
+    
         // Log the account creation
-        logOutput = "New account created for " + firstName + " " + lastName + ". Checking account number is " + newUser.getCheckingAccountNumber() + ", Savings account number is " + newUser.getSavingsAccountNumber() + ", and Credit card account number is " + newUser.getCreditAccountNumber();
+        logOutput = "New account created for " + firstName + " " + lastName + ". Checking account number is " + BankUser.lastCheckingAccountNumber + ", Savings account number is " + BankUser.lastSavingsAccountNumber + ", and Credit account number is " + BankUser.lastCreditAccountNumber;
         log(logOutput);
-
+    
         System.out.println("Account created successfully!");
 
+        } catch (IOException e) {
+            System.out.println("Error saving user to CSV: " + e.getMessage());
+            e.printStackTrace(); // Print stack trace for debugging
+        }
         // Ask the user if they would like to log in
         System.out.println("Would you like to log in to your account? (yes/no)");
         String choice = sc.next();
         if (choice.equalsIgnoreCase("yes")) {
-            exit = true;
-        }
-        else {
-            System.out.println("Thank you for choosing El Paso Miners Bank. Goodbye!");;
             exit = true;
         }
     }
@@ -597,13 +604,14 @@ public class RunBank {
                 case 3: // Create a new account
                     CreateAccount(customers.get("000000000"), customers);
                     break;
-
                 default:
+                    System.out.println("it left the case statement");
                     System.out.println("Invalid choice. Please try again.\n");
                     askUserRole(customers);
                     break;
             }
         } catch (NumberFormatException e) {
+            System.out.println("it caught an exception");
             System.out.println("Invalid choice. Please try again.");
             askUserRole(customers);
         }

@@ -2,10 +2,10 @@ import java.io.*;
 import java.util.*;
 
 class BankUser {
-    private static int lastUserId;
-    private static int lastSavingsAccountNumber = 0;
-    private static int lastCheckingAccountNumber = 0;
-    private static int lastCreditAccountNumber = 0;
+    public static int lastCheckingAccountNumber = 0;
+    public static int lastCreditAccountNumber = 0;
+    public static int lastUserId;
+    public static int lastSavingsAccountNumber = 0;
 
     private int userId;
     private String firstName;
@@ -24,30 +24,62 @@ class BankUser {
 
     public BankUser() {}
 
-    public BankUser(String firstName, String lastname, String dob, String address, String phoneNumber, int creditLimit) {
-        this.userId = ++lastUserId;
+    public BankUser(int userID, String firstName, String lastname, String dob,
+                    String address, String phoneNumber, int checkingAccountNumber,
+                    int savingsAccountNumber, int creditAccountNumber, int creditLimit) {
+        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.savingsAccountNumber = ++savingsAccountNumber;
-        this.checkingAccountNumber = ++checkingAccountNumber;
-        this.creditAccountNumber = ++creditAccountNumber;
+        this.savingsAccountNumber = checkingAccountNumber;
+        this.checkingAccountNumber = savingsAccountNumber;
+        this.creditAccountNumber = creditAccountNumber;
         this.creditLimit = generateCreditLimit(creditLimit);
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getDOB() {
+        return dob;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public int getSavingsAccountNumber() {
-        return savingsAccountNumber;
+        return lastSavingsAccountNumber;
     }
 
     public int getCheckingAccountNumber() {
-        return checkingAccountNumber;
+        return lastCheckingAccountNumber;
     }
 
     public int getCreditAccountNumber() {
-        return creditAccountNumber;
+        return lastCreditAccountNumber;
     }
+
+    public int getCreditLimit() {
+        return creditLimit;
+    }
+
+    
 
     /**
      * Generates a credit limit based on the user's credit score.
@@ -66,32 +98,107 @@ class BankUser {
         }
     }
 
-    public String toCSV(List<BankUser> users, String filePath) throws IOException {
-        return String.join(",", String.valueOf(userId), firstName, lastName, dob, address, city, state, zip, phoneNumber, String.valueOf(checkingAccountNumber), String.valueOf(savingsAccountNumber), String.valueOf(creditAccountNumber), String.valueOf(creditLimit));
+    public void toCSV(List<BankUser> users, String filePath) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            for (BankUser user : users) {
+                writer.write(String.join(",", 
+                    String.valueOf(user.getUserId()), 
+                    user.getFirstName(), 
+                    user.getLastName(), 
+                    user.getDOB(), 
+                    user.getAddress(), 
+                    user.getPhoneNumber(), 
+                    String.valueOf(user.getCheckingAccountNumber()), 
+                    String.valueOf(user.getSavingsAccountNumber()), 
+                    String.valueOf(user.getCreditAccountNumber()), 
+                    String.valueOf(user.getCreditLimit()
+                )));
+                writer.newLine();
+            }
+        }
     }
 
     public static BankUser fromCustomer(Customer customer) {
-        BankUser user = new BankUser(
-            customer.getFirstName(),
-            customer.getLastName(),
-            customer.getDOB(),
-            customer.getAddress(),
-            customer.getPhoneNumber(),
-            0 // Placeholder for credit score, should be set appropriately
-        );
-        user.userId = Integer.parseInt(customer.getCustomerID());
+        int id = Integer.parseInt(customer.getCustomerID()); // Assuming there's a method to get the ID
+        String firstName = customer.getFirstName();
+        String lastName = customer.getLastName();
+        String dob = customer.getDOB();
+        String address = customer.getAddress();
+        String phoneNumber = customer.getPhoneNumber();
+        int creditScore = customer.getCreditScore(); // Assuming there's a method to get the credit score
+
+        // Initialize account numbers
+        int checkingAccountNumber = 0;
+        int savingsAccountNumber = 0;
+        int creditAccountNumber = 0;
+
+        // Iterate through the customer's accounts and set the account numbers
         for (Account account : customer.getAccounts()) {
             if (account instanceof Checking) {
-                user.checkingAccountNumber = Integer.parseInt(account.getAccountNumber());
-                lastCheckingAccountNumber = Math.max(lastCheckingAccountNumber, user.checkingAccountNumber);
+                checkingAccountNumber = Integer.parseInt(account.getAccountNumber());
             } else if (account instanceof Savings) {
-                user.savingsAccountNumber = Integer.parseInt(account.getAccountNumber());
-                lastSavingsAccountNumber = Math.max(lastSavingsAccountNumber, user.savingsAccountNumber);
+                savingsAccountNumber = Integer.parseInt(account.getAccountNumber());
             } else if (account instanceof Credit) {
-                user.creditAccountNumber = Integer.parseInt(account.getAccountNumber());
-                lastCreditAccountNumber = Math.max(lastCreditAccountNumber, user.creditAccountNumber);
+                creditAccountNumber = Integer.parseInt(account.getAccountNumber());
             }
         }
+
+        // Create the BankUser object
+        BankUser user = new BankUser(
+            id,
+            firstName,
+            lastName,
+            dob,
+            address,
+            phoneNumber,
+            creditScore,
+            checkingAccountNumber,
+            savingsAccountNumber,
+            creditAccountNumber
+        );
+
         return user;
+    }
+
+    public static void updateLastNumbersFromCSV(String filePath) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line = reader.readLine(); // Read the header line
+            if (line == null) {
+                throw new IOException("CSV file is empty");
+            }
+
+            String[] headers = line.split(",");
+            Map<String, Integer> headerMap = new HashMap<>();
+            for (int i = 0; i < headers.length; i++) {
+                headerMap.put(headers[i].trim(), i);
+            }
+
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.split(",");
+                int userId = Integer.parseInt(fields[headerMap.get("Identification Number")]);
+                int checkingAccountNumber = Integer.parseInt(fields[headerMap.get("Checking Account Number")]);
+                int savingsAccountNumber = Integer.parseInt(fields[headerMap.get("Savings Account Number")]);
+                int creditAccountNumber = Integer.parseInt(fields[headerMap.get("Credit Account Number")]);
+
+                if (userId > lastUserId) {
+                    lastUserId = userId;
+                }
+                if (checkingAccountNumber > lastCheckingAccountNumber) {
+                    lastCheckingAccountNumber = checkingAccountNumber;
+                }
+                if (savingsAccountNumber > lastSavingsAccountNumber) {
+                    lastSavingsAccountNumber = savingsAccountNumber;
+                }
+                if (creditAccountNumber > lastCreditAccountNumber) {
+                    lastCreditAccountNumber = creditAccountNumber;
+                }
+            }
+        }
+
+        // Increment the last numbers for the new user
+        lastUserId++;
+        lastCheckingAccountNumber++;
+        lastSavingsAccountNumber++;
+        lastCreditAccountNumber++;
     }
 }
