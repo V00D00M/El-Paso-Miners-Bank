@@ -132,24 +132,34 @@ public class RunBank {
         Scanner sc = new Scanner(System.in);
         boolean exit = false;
         String logOutput = "";
-        try {
-            System.out.println("\nThanks for choosing to create an account with us!");
-            System.out.println("Please enter your first name: ");
-            String firstName = sc.next();
-            System.out.println("Please enter your last name: ");
-            String lastName = sc.next();
-            System.out.println("Please enter your date of birth (D-M-YY): ");
-            String DOB = sc.next();
-            sc.nextLine();
-            System.out.println("Please enter your street address: ");
-            System.out.println("Enter your information in this format: street address, city, state(TX) zip code");
-            String address = sc.nextLine();
-            String addressQuotes = "\"" + address + "\"";
-            System.out.println("Please enter your phone number: ");
-            String phoneNumber = sc.next();
-            System.out.println("Please enter your credit score: ");
-            int creditScore = sc.nextInt();
+        System.out.println("\nThanks for choosing to create an account with us!");
+        System.out.println("Please enter your first name: ");
+        String firstName = sc.next();
+        System.out.println("Please enter your last name: ");
+        String lastName = sc.next();
+        String fullName = firstName + " " + lastName;
+
+        // Check if the user already exists
+        boolean userExists = customerDB.values().stream()
+        .anyMatch(customer -> (customer.getFirstName() + " " + customer.getLastName()).equals(fullName));
+        // If the user already exists, ask them to try again
+        if (userExists) {
+            System.out.println("A user with the same name already exists. Please try again.");
+            CreateAccount(cx, customerDB);
+        }
         
+        System.out.println("Please enter your date of birth (D-M-YY): ");
+        String DOB = sc.next();
+        sc.nextLine();
+        System.out.println("Please enter your street address: ");
+        System.out.println("Enter your information in this format: street address, city, state(TX) zip code");
+        String address = sc.nextLine();
+        String addressQuotes = "\"" + address + "\"";
+        System.out.println("Please enter your phone number: ");
+        String phoneNumber = sc.next();
+        System.out.println("Please enter your credit score: ");
+        int creditScore = sc.nextInt();
+        try {
             List<BankUser> newUserList = new ArrayList<>();
             BankUser.updateLastNumbersFromCSV("CS 3331 - Bank Users.csv");
             BankUser newUser = new BankUser(
