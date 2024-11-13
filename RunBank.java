@@ -184,7 +184,6 @@ public class RunBank {
             // Log the account creation
             logOutput = "New account created for " + firstName + " " + lastName + ". Checking account number is " + BankUser.lastCheckingAccountNumber + ", Savings account number is " + BankUser.lastSavingsAccountNumber + ", and Credit account number is " + BankUser.lastCreditAccountNumber;
             log(logOutput);
-        
             System.out.println("Account created successfully!");
 
         } catch (IOException e) {
@@ -523,66 +522,8 @@ public class RunBank {
      * @param customers the map of customers in the database
      */
     public static void adminMenu(Map<String, Customer> customers) {
-        String logOutput;
-        Scanner sc = new Scanner(System.in);
-        boolean exit = false;
-        System.out.println("Admin Console");
-        Credit creditAccount = new Credit("000000000", 1000, 0);
-
-        while (!exit) {
-            System.out.print("\nWhich account would you like to inquire about?\nEnter the name of the account holder: ");
-            String input = sc.nextLine().trim();
-
-            if (input.equalsIgnoreCase("EXIT")) {
-                System.out.println("\nThank you for choosing El Paso Miners Bank. Goodbye!\n");
-                exit = true;
-            } else {
-                boolean found = false;
-                for (Customer cx : customers.values()) {
-                    String fullName = cx.firstName + " " + cx.lastName;
-                    if (fullName.equalsIgnoreCase(input)) { // Check if the customer is found
-                        found = true;
-                        // Display the customer's information
-                        System.out.println("\nCustomer Details:");
-                        System.out.println("--------------------");
-                        System.out.println("ID: " + cx.getCustomerID());
-                        System.out.println("Name: " + cx.firstName + " " + cx.lastName);
-                        System.out.println("DOB: " + cx.DOB);
-                        System.out.println("Address: " + cx.address);
-                        System.out.println("Phone Number: " + cx.phoneNumber);
-                        System.out.println("Checking Account Number: " + cx.account.get(0).getAccountNumber());
-                        System.out.println("Checking Balance: " + cx.account.get(0).getBalance());
-                        System.out.println("Savings Account Number: " + cx.account.get(1).getAccountNumber());
-                        System.out.println("Savings Balance: " + cx.account.get(1).getBalance());
-                        System.out.println("Credit Account Number: " + cx.account.get(2).getAccountNumber());
-                        System.out.println("Credit Max: " + creditAccount.getCreditMax());
-                        System.out.println("Credit Balance: " + cx.account.get(2).getBalance());
-                        logOutput = ("Admin made an account inquiry on " + cx.firstName + " " + cx.lastName + "'s accounts. " + cx.firstName + " " + cx.lastName + "'s Checking balance is $" + cx.account.get(0).getBalance() + ", Savings balance is $" + cx.account.get(1).getBalance() + ", and Credit balance is $" + cx.account.get(2).getBalance());
-                        log(logOutput);
-
-                        // Ask the admin if they would like to inquire about another account
-                        System.err.println("\nWould you like to inquire about another account? (yes/no)");
-                        String choice = sc.nextLine().trim();
-                        if (choice.equalsIgnoreCase("no")) {
-                            // Ask if they would like to sign in as a customer or exit the program
-                            System.err.println("\nWould you like to go back to the main menu or exit the program? (main menu/exit)");
-                            String userChoice = sc.nextLine().trim();
-                            if (userChoice.equalsIgnoreCase("main menu") || userChoice.equalsIgnoreCase("menu")) {
-                                askUserRole(customers);
-                                exit = true;
-                            } else if (userChoice.equalsIgnoreCase("exit")) {
-                                System.out.println("\nThank you for choosing El Paso Miners Bank. Goodbye!\n");
-                                exit = true;
-                            }
-                        }
-                        break; // Break out of the loop after handling the found customer
-                    }
-                }
-                if (!found) {
-                    System.out.println("Customer not found. Please try again.");
-                }
-            }
-        }
+        TransactionReader transactionReader = new TransactionReader();
+        transactionReader.adminMenu(customers);
     }
 
     /**
@@ -592,6 +533,7 @@ public class RunBank {
      */
     public static void askUserRole(Map<String, Customer> customers) {
         Scanner sc = new Scanner(System.in);
+        TransactionReader transactionReader = new TransactionReader();
         System.out.println("Are you an Admin or a Customer?");
         System.out.println("1. Admin");
         System.out.println("2. Customer");
@@ -606,7 +548,7 @@ public class RunBank {
             int choice = Integer.parseInt(input);
             switch (choice) {
                 case 1: // Admin
-                    adminMenu(customers);
+                    transactionReader.adminMenu(customers);
                     break;
                 case 2: // Customer
                     // Return to the main method

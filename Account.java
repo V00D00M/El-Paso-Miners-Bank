@@ -23,13 +23,19 @@ public abstract class Account {
      * @return the account number
      */
     public String getAccountNumber() { return accountNumber; }
-        
+
     /**
      * Gets the balance of the account.
      *
      * @return the balance
      */
     public double getBalance() { return balance; } 
+
+    /**
+     * Gets the account type
+     * 
+     */
+    public String getAccountType() {return "Account";} // this is temporary
 
     /**
      * Deposits the specified amount into the account.
