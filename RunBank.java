@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 
+
 /**
  * The RunBank class is the main entry point for the banking system application.
  * It handles user interactions, reads customer data from a CSV file, and performs various banking operations.
@@ -219,17 +220,20 @@ public class RunBank {
                 case 1: // Checking Account
                     System.out.println("Checking Account-" + cx.account.get(0).getAccountNumber() + " Balance: $" + cx.account.get(0).getBalance());
                     logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(0).getBalance());
+                    Logger.getInstance().addToLog(cx, logOutput);
                     log(logOutput);
                     break;
                 case 2: // Savings Account
                     System.out.println("Savings Account-" + cx.account.get(1).getAccountNumber() + " Balance: $" + cx.account.get(1).getBalance());
                     logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(1).getBalance());
+                    Logger.getInstance().addToLog(cx, logOutput);
                     log(logOutput);
                     break;
                 case 3: // Credit Account
                     Credit creditAccount = cx.getCreditMax();
                     System.out.println("Credit Account-" + creditAccount.getAccountNumber() + " Balance: $" + creditAccount.getBalance() + " Credit Max: $" + creditAccount.getCreditMax());
                     logOutput = (cx.firstName + " " + cx.lastName + " made a balance inquiry on Credit-" + creditAccount.getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + creditAccount.getBalance());
+                    Logger.getInstance().addToLog(cx, logOutput);
                     log(logOutput);
                     break;
                 default: // Invalid choice
@@ -274,18 +278,21 @@ public class RunBank {
                         cx.account.get(0).deposit(amount);
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " deposited $" + amount + " to Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Checking balance is $" + cx.account.get(0).getBalance());
+                        Logger.getInstance().addToLog(cx, logOutput);
                         log(logOutput);
                         break;
                     case 2: // Savings Account
                         cx.account.get(1).deposit(amount);
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " deposited $" + amount + " to Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Savings balance is $" + cx.account.get(1).getBalance());
+                        Logger.getInstance().addToLog(cx, logOutput);
                         log(logOutput);
                         break;
                     case 3: // Credit Account
                         cx.account.get(2).deposit(amount);
                         System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " deposited $" + amount + " to Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Credit balance is $" + cx.account.get(2).getBalance());
+                        Logger.getInstance().addToLog(cx, logOutput);
                         log(logOutput);
                         break;
                     default:
@@ -326,12 +333,14 @@ public class RunBank {
                         cx.account.get(0).withdraw(amount);
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(0).getBalance());
+                        Logger.getInstance().addToLog(cx, logOutput);
                         log(logOutput);
                         break;
                     case 2: // Savings Account
                         cx.account.get(1).withdraw(amount);
                         System.out.println("Savings Account Balance: $" + df.format(cx.account.get(1).getBalance()));
                         logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + df.format(cx.account.get(1).getBalance()));
+                        Logger.getInstance().addToLog(cx, logOutput);
                         log(logOutput);
                         break;
                     default:
@@ -397,6 +406,7 @@ public class RunBank {
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                         System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " Made payment from Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Credit balance is $" + cx.account.get(2).getBalance());
+                        Logger.getInstance().addToLog(cx, logOutput);
                         log(logOutput);
                         break;
                     case 2: // Savings Account
@@ -404,6 +414,7 @@ public class RunBank {
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
                         System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
                         logOutput = (cx.firstName + " " + cx.lastName + " Made payment from Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Credit balance is $" + cx.account.get(2).getBalance());
+                        Logger.getInstance().addToLog(cx, logOutput);
                         log(logOutput);
                         break;
                     default:
@@ -456,6 +467,7 @@ public class RunBank {
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
                         logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Checking-" + cx.account.get(0).getAccountNumber() + " to Savings-" + cx.account.get(1).getAccountNumber();
+                        Logger.getInstance().addToLog(cx, logOutput);
                         log(logOutput);
                         break;
                     case 2: // Savings Account
@@ -464,6 +476,7 @@ public class RunBank {
                         System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
                         System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                         logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Savings-" + cx.account.get(1).getAccountNumber() + " to Checking-" + cx.account.get(0).getAccountNumber();
+                        Logger.getInstance().addToLog(cx, logOutput);
                         log(logOutput);
                         break;
                     default:
@@ -487,6 +500,7 @@ public class RunBank {
                                     account.deposit(amount);
                                     System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
                                     logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Checking-" + cx.account.get(0).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account \n" + account.getAccountNumber();
+                                    Logger.getInstance().addToLog(cx, logOutput);
                                     log(logOutput);
                                     break;
                                 case 2: // Savings Account
@@ -494,6 +508,7 @@ public class RunBank {
                                     account.deposit(amount);
                                     System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
                                     logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Savings-" + cx.account.get(1).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account \n" + account.getAccountNumber();
+                                    Logger.getInstance().addToLog(cx, logOutput);
                                     log(logOutput);
                                     break;
                                 default:
