@@ -133,24 +133,24 @@ public class RunBank {
         boolean exit = false;
         String logOutput = "";
         try {
-        System.out.println("\nThanks for choosing to create an account with us!");
-        System.out.println("Please enter your first name: ");
-        String firstName = sc.next();
-        System.out.println("Please enter your last name: ");
-        String lastName = sc.next();
-        System.out.println("Please enter your date of birth (D-M-YY): ");
-        String DOB = sc.next();
-        sc.nextLine();
-        System.out.println("Please enter your street address: ");
-        System.out.println("Enter your information in this format: street address, city, state(TX) zip code");
-        String address = sc.nextLine();
-        String addressQuotes = "\"" + address + "\"";
-        System.out.println("Please enter your phone number: ");
-        String phoneNumber = sc.next();
-        System.out.println("Please enter your credit score: ");
-        int creditScore = sc.nextInt();
-    
-        List<BankUser> newUserList = new ArrayList<>();
+            System.out.println("\nThanks for choosing to create an account with us!");
+            System.out.println("Please enter your first name: ");
+            String firstName = sc.next();
+            System.out.println("Please enter your last name: ");
+            String lastName = sc.next();
+            System.out.println("Please enter your date of birth (D-M-YY): ");
+            String DOB = sc.next();
+            sc.nextLine();
+            System.out.println("Please enter your street address: ");
+            System.out.println("Enter your information in this format: street address, city, state(TX) zip code");
+            String address = sc.nextLine();
+            String addressQuotes = "\"" + address + "\"";
+            System.out.println("Please enter your phone number: ");
+            String phoneNumber = sc.next();
+            System.out.println("Please enter your credit score: ");
+            int creditScore = sc.nextInt();
+        
+            List<BankUser> newUserList = new ArrayList<>();
             BankUser.updateLastNumbersFromCSV("CS 3331 - Bank Users.csv");
             BankUser newUser = new BankUser(
                 BankUser.lastUserId,
@@ -170,12 +170,12 @@ public class RunBank {
             BankUser bankUserInstance = new BankUser();
             bankUserInstance.toCSV(newUserList, "CS 3331 - Bank Users.csv");
             System.out.println("New user created and saved to CSV successfully.");
-    
-        // Log the account creation
-        logOutput = "New account created for " + firstName + " " + lastName + ". Checking account number is " + BankUser.lastCheckingAccountNumber + ", Savings account number is " + BankUser.lastSavingsAccountNumber + ", and Credit account number is " + BankUser.lastCreditAccountNumber;
-        log(logOutput);
-    
-        System.out.println("Account created successfully!");
+        
+            // Log the account creation
+            logOutput = "New account created for " + firstName + " " + lastName + ". Checking account number is " + BankUser.lastCheckingAccountNumber + ", Savings account number is " + BankUser.lastSavingsAccountNumber + ", and Credit account number is " + BankUser.lastCreditAccountNumber;
+            log(logOutput);
+        
+            System.out.println("Account created successfully!");
 
         } catch (IOException e) {
             System.out.println("Error saving user to CSV: " + e.getMessage());
