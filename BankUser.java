@@ -7,7 +7,7 @@ class BankUser {
     public static int lastUserId;
     public static int lastSavingsAccountNumber = 0;
 
-    private int userId;
+    private int userID;
     private String firstName;
     private String lastName;
     private String dob;
@@ -24,10 +24,10 @@ class BankUser {
 
     public BankUser() {}
 
-    public BankUser(int userID, String firstName, String lastname, String dob,
+    public BankUser(int userID, String firstName, String lastName, String dob,
                     String address, String phoneNumber, int checkingAccountNumber,
                     int savingsAccountNumber, int creditAccountNumber, int creditLimit) {
-        this.userId = userId;
+        this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
@@ -40,7 +40,7 @@ class BankUser {
     }
 
     public int getUserId() {
-        return userId;
+        return lastUserId;
     }
 
     public String getFirstName() {
@@ -108,11 +108,14 @@ class BankUser {
                     user.getDOB(), 
                     user.getAddress(), 
                     user.getPhoneNumber(), 
-                    String.valueOf(user.getCheckingAccountNumber()), 
-                    String.valueOf(user.getSavingsAccountNumber()), 
+                    String.valueOf(user.getCheckingAccountNumber()),
+                    String.valueOf(0),
+                    String.valueOf(user.getSavingsAccountNumber()),
+                    String.valueOf(0),
                     String.valueOf(user.getCreditAccountNumber()), 
-                    String.valueOf(user.getCreditLimit()
-                )));
+                    String.valueOf(user.getCreditLimit()),
+                    String.valueOf(0)
+                ));
                 writer.newLine();
             }
         }
@@ -174,7 +177,7 @@ class BankUser {
             }
 
             while ((line = reader.readLine()) != null) {
-                String[] fields = line.split(",");
+                String[] fields = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
                 int userId = Integer.parseInt(fields[headerMap.get("Identification Number")]);
                 int checkingAccountNumber = Integer.parseInt(fields[headerMap.get("Checking Account Number")]);
                 int savingsAccountNumber = Integer.parseInt(fields[headerMap.get("Savings Account Number")]);
