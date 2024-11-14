@@ -19,7 +19,7 @@ public class Logger{
         return instance;
     }
 
-  public void addToLog( Customer customer, String action){
+public void addToLog( Customer customer, String action){
     String firstName = customer.getFirstName();
     String lastName = customer.getLastName();
     String fullName = lastName + "," + firstName;
@@ -31,5 +31,16 @@ public class Logger{
         logs.put(fullName, contLogs);
         }
     }
+public void searchPrintLog(Customer customer){
+    String fullName = customer.getFirstName() + customer.getLastName();
+    if(logs.containsKey(fullName)){
+        int i = logs.get(fullName).size();
+        for(int j = 0; i > j; j++){
+            System.out.println(logs.get(fullName).get(j));
+        }
+    } else {
+        System.out.println("This customer does not have an entry");
+    }
+}
 
 }
