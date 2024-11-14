@@ -1,8 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class TransactionReader {
 
@@ -12,6 +11,7 @@ public class TransactionReader {
             br.readLine(); // Skip the header line
             while ((line = br.readLine()) != null) {
                 String[] transactionDetails = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+                if(transactionDetails.length != 4){
                 System.out.println("Transaction: " + line);
                 String fromFirstName = transactionDetails[0];
                 System.out.println(fromFirstName);
@@ -38,7 +38,6 @@ public class TransactionReader {
                         handleTransfers(fromFirstName, fromLastName, fromWhere, toFirstName, toLastName, toWhere, amount, customerDB);
                         break;
                     case "inquires":
-                        handleInquires(fromFirstName, fromLastName, fromWhere, customerDB);
                         break;
                     case "withdraws":
                         handleWithdraws(fromFirstName, fromLastName, fromWhere, amount, customerDB);
@@ -49,6 +48,7 @@ public class TransactionReader {
                     default:
                         System.out.println("Invalid action: " + action);
                         break;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -57,22 +57,43 @@ public class TransactionReader {
     }
 
     private Customer findCustomer(String firstName, String lastName, Map<String, Customer> customerDB) {
-        for (Customer customer : customerDB.values()) {
-            if (customer.getFirstName().equals(firstName) && customer.getLastName().equals(lastName)) {
-                return customer;
-            }
-        }
-        return null;
+        Customer cx = iterHash(firstName, lastName, customerDB);
+        return cx;
     }
     
-    private Account findAccount(Customer customer, String accountType) {
-        for (Account account : customer.getAccounts()) {
-            System.out.println("Checking account type: " + account.getAccountType() + " against " + accountType);
-            if (account.getAccountType().equalsIgnoreCase(accountType.trim())) {
-                return account;
+    private Customer iterHash(String firstName, String lastName, Map<String,Customer> customerDB){
+        String fullName = firstName + lastName;
+        System.out.println(fullName);
+        String tempFullName;
+        Map<String, Customer> hm = customerDB;
+        Customer cx;
+        for (Map.Entry<String,Customer> tempMap : hm.entrySet()){
+            String key = tempMap.getKey();
+            cx = hm.get(key);
+            tempFullName = cx.getFirstName() + cx.getLastName();
+
+            if(tempFullName.equals(fullName)){
+                return cx;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Customer does not exist in our records");
+    }
+
+    private Account findAccount(Customer customer, String accountType) {
+        Account tempAcc;
+        switch(accountType){
+        case "Checking":
+            tempAcc = customer.account.get(0);
+            return tempAcc;
+        case "Savings":
+            tempAcc = customer.account.get(1);
+            return tempAcc;
+        case "Credit":
+            tempAcc = customer.account.get(2);
+            return tempAcc;
+        }
+
+        throw new IllegalArgumentException("That account type does not exist in our records");
     }
 
     private void handlePays(String fromFirstName, String fromLastName, String fromWhere, String toFirstName, String toLastName, String toWhere, double amount, Map<String, Customer> customerDB) {
@@ -157,22 +178,8 @@ public class TransactionReader {
         System.out.println("Payment of $" + amount + " from " + fromFirstName + " " + fromLastName + " to " + toFirstName + " " + toLastName + " completed successfully.");
     }
 
-    private void handleInquires(String fromFirstName, String fromLastName, String fromWhere, Map<String, Customer> customerDB) {
-        Customer customer = findCustomer(fromFirstName, fromLastName, customerDB);
-        if (customer == null) {
-            System.out.println("Customer not found: " + fromFirstName + " " + fromLastName);
-            return;
-        }
-
-        Account account = findAccount(customer, fromWhere);
-        if (account == null) {
-            System.out.println("Account not found: " + fromWhere);
-            return;
-        }
-
-        System.out.println("Balance for " + fromFirstName + " " + fromLastName + " in " + fromWhere + ": $" + customer.account.get(0).getBalance());
-        System.out.println("Balance for " + fromFirstName + " " + fromLastName + " in " + fromWhere + ": $" + customer.account.get(1).getBalance());
-        System.out.println("Balance for " + fromFirstName + " " + fromLastName + " in " + fromWhere + ": $" + customer.account.get(2).getBalance());
+    private void handleInquires(String fromFirstName, String fromLastName, String fromWhere) {
+        System.out.println(fromFirstName + " " + fromLastName + " From:" + fromWhere);
     }
 
     private void handleWithdraws(String fromFirstName, String fromLastName, String fromWhere, double amount, Map<String, Customer> customerDB) {
