@@ -252,13 +252,13 @@ public class TransactionReader {
 
     private void inquireAboutAccount(Map<String, Customer> customers) {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the name of the account holder: ");
+        System.out.print("Enter the name or id of the account holder: ");
         String input = sc.nextLine().trim();
 
         boolean found = false;
         for (Customer cx : customers.values()) {
             String fullName = cx.getFirstName() + " " + cx.getLastName();
-            if (fullName.equalsIgnoreCase(input)) {
+            if (fullName.equalsIgnoreCase(input) || cx.getCustomerID().equalsIgnoreCase(input)) {
                 found = true;
                 // Display the customer's information
                 System.out.println("\nCustomer Details:");
