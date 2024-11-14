@@ -98,9 +98,18 @@ class BankUser {
         }
     }
 
-    public void toCSV(List<BankUser> users, String filePath) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-            for (BankUser user : users) {
+    public void toCSV(List<BankUser> users, String originalFilePath, String newFilePath) throws IOException {
+        File file = new File(newFilePath);
+        String filePathToRead = file.exists() ? newFilePath : originalFilePath;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePathToRead));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(newFilePath, true))) {
+            String line;
+            boolean firstLine = true;
+
+            // checks if the updated bank users file exists
+            if (file.exists()) {
+                for (BankUser user : users) {
                 writer.newLine();
                 writer.write(String.join(",", 
                     String.valueOf(user.getUserId()), 
@@ -115,8 +124,37 @@ class BankUser {
                     String.valueOf(100),
                     String.valueOf(user.getCreditAccountNumber()), 
                     String.valueOf(user.getCreditLimit()),
-                    String.valueOf(-100)
-                ));
+                    String.valueOf(-1000.00)
+                    ));
+                }
+            } else {
+                // Copy existing users to the new CSV file
+                while ((line = reader.readLine()) != null) {
+                    if (!firstLine) {
+                        writer.newLine();
+                    }
+                    writer.write(line);
+                    firstLine = false;
+                }
+
+                for (BankUser user : users) {
+                    writer.newLine();
+                    writer.write(String.join(",", 
+                        String.valueOf(user.getUserId()), 
+                        user.getFirstName(), 
+                        user.getLastName(), 
+                        user.getDOB(), 
+                        user.getAddress(), 
+                        user.getPhoneNumber(), 
+                        String.valueOf(user.getCheckingAccountNumber()),
+                        String.valueOf(100),
+                        String.valueOf(user.getSavingsAccountNumber()),
+                        String.valueOf(100),
+                        String.valueOf(user.getCreditAccountNumber()), 
+                        String.valueOf(user.getCreditLimit()),
+                        String.valueOf(-1000.00)
+                    ));
+                }
             }
         }
     }
@@ -163,8 +201,12 @@ class BankUser {
         return user;
     }
 
-    public static void updateLastNumbersFromCSV(String filePath) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+    public static void updateLastNumbersFromCSV(String originalFilePath, String newFilePath) throws IOException {
+        File file = new File(newFilePath);
+        String filePathToRead = file.exists() ? newFilePath : originalFilePath;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePathToRead));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(newFilePath, true))) {
+            boolean firstLine = true;
             String line = reader.readLine(); // Read the header line
             if (line == null) {
                 throw new IOException("CSV file is empty");

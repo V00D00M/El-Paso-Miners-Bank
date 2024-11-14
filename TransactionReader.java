@@ -248,13 +248,20 @@ public class TransactionReader {
                     inquireAboutAccount(customers);
                     break;
                 case "3":
-                    exit = true;
+                case "exit":
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     break;
             }
         }
+    }
+    public void askUserRole(Map<String, Customer> customers) {
+        // Implementation of askUserRole method
+        // This method should handle the logic for asking the user role
+        System.out.println("Returning to the main menu...");
+        // Add your logic here
     }
 
     private void inquireAboutAccount(Map<String, Customer> customers) {

@@ -7,3 +7,12 @@
 [2024-11-10 23:16:50] Simba Disney withdrew money from Savings-2011. Simba Disney's balance is $323
 [2024-11-10 23:20:42] Simba Disney withdrew money from Savings-2011. Simba Disney's balance is $323.47
 [2024-11-10 23:20:51] Simba Disney withdrew money from Checking-1011. Simba Disney's balance is $1286.79
+[2024-11-13 20:59:44] New account created for Alex Karl. Checking account number is 1103, Savings account number is 2103, and Credit account number is 3103
+[2024-11-13 21:09:24] New account created for Alex Karl. Checking account number is 1103, Savings account number is 2103, and Credit account number is 3103
+[2024-11-13 21:14:11] New account created for Alex Karl. Checking account number is 1103, Savings account number is 2103, and Credit account number is 3103
+[2024-11-13 21:18:55] New account created for Nathan Diamond. Checking account number is 1103, Savings account number is 2103, and Credit account number is 3103
+[2024-11-13 22:06:45] New account created for Nathan Diamon. Checking account number is 1103, Savings account number is 2103, and Credit account number is 3103
+[2024-11-13 23:20:23] New account created for Alex Karl. Checking account number is 1103, Savings account number is 2103, and Credit account number is 3103
+[2024-11-13 23:22:36] New account created for Alex Karl. Checking account number is 1103, Savings account number is 2103, and Credit account number is 3103
+[2024-11-13 23:23:22] New account created for Nathan Diamond. Checking account number is 1103, Savings account number is 2103, and Credit account number is 3103
+[2024-11-13 23:25:57] New account created for Joel Espino. Checking account number is 1104, Savings account number is 2104, and Credit account number is 3104

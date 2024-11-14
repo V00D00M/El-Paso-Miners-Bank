@@ -18,3 +18,20 @@ Use Case Scenario 2: Funds Transfer Between Accounts
 5. The customer selects the accounts and enters the amount to be transferred.
 6. The system verifies the available balance in the source account.
 7. The system processes the transfer and updates the balances of both accounts.
+
+Use Case Scenario 3: Adding a New Account
+-----------------------------------------
+1. The customer is greeted with a welcome message.
+2. The customer chooses to add a new account to their profile.
+3. The system prompts the customer to enter the account details.
+4. The customer enters the account details and submits the request.
+5. The system verifies if the account hasn't already been added.
+6. The system adds the new account to the customer's profile.
+
+Use Case Scenario 4: Checking Transaction History
+-------------------------------------------------
+1. The user is greeted with a welcome message.
+2. The user selects the admin option
+3. The system prompts the user to select the transactions or to inquire about a specific account.
+4. The user selects the transactions option.
+5. The system displays the transaction history of the user.

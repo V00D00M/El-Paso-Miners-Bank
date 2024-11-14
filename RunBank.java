@@ -18,6 +18,8 @@ would best fit with our needs for a database and making logs for each interactio
 depositing money, transferring money, etc. and having that log be written onto a file that would be appended to. 
 Overall we were to be given a description and implement a banking system that would fit the specifications we were given.*/
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -162,7 +164,7 @@ public class RunBank {
         int creditScore = sc.nextInt();
         try {
             List<BankUser> newUserList = new ArrayList<>();
-            BankUser.updateLastNumbersFromCSV("CS 3331 - Bank Users.csv");
+            BankUser.updateLastNumbersFromCSV("CS 3331 - Bank Users.csv", "CS 3331 - Updated Bank Users.csv");
             BankUser newUser = new BankUser(
                 BankUser.lastUserId,
                 firstName,
@@ -179,7 +181,7 @@ public class RunBank {
     
             // Save the new user to the CSV file
             BankUser bankUserInstance = new BankUser();
-            bankUserInstance.toCSV(newUserList, "CS 3331 - Bank Users.csv");
+            bankUserInstance.toCSV(newUserList, "CS 3331 - Bank Users.csv", "CS 3331 - Updated Bank Users.csv");
             System.out.println("New user created and saved to CSV successfully.");
         
             // Log the account creation
@@ -456,7 +458,6 @@ public class RunBank {
     
             System.out.print("Enter the amount you would like to pay: $");
             double amount = sc.nextDouble();
-    
             if (transferChoice == 1) {
                 // Transfer to own account
                 switch (choice) {
@@ -613,7 +614,7 @@ public class RunBank {
      *
      * @param customers the map of customers to write to the CSV file
      */
-    private static void writeBalancesToCSV(Map<String, Customer> customers) throws IOException {
+    public static void writeBalancesToCSV(Map<String, Customer> customers) throws IOException {
         FileWriter writer = new FileWriter("updated_balances.csv");
         writer.write("Identification Number,First Name,Last Name,Date of Birth,Address,Phone Number,Checking Account Number,Checking Balance,Savings Account Number,Savings Balance,Credit Account Number,Credit Max,Credit Balance\n");
         for (Customer cx : customers.values()) {

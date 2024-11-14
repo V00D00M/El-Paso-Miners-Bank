@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.File;
 
 /**
  * The CSVReader class provides functionality to read customer data from a CSV file
@@ -22,6 +23,12 @@ public class CSVReader {
     * @throws IOException if an I/O error occurs
     */
     public Map<String, Customer> getCustomers(String filePath) throws IOException {
+        String updatedFilePath = "CS 3331 - Updated Bank Users.csv";
+        File file = new File(updatedFilePath);
+        if (file.exists()) {
+            filePath = updatedFilePath;
+        }
+
         Map<String, Customer> customerDB = new HashMap<>();
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
         String headerLine = reader.readLine();
