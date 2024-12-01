@@ -56,6 +56,9 @@ public class RunBank {
         boolean exit = false;
         Customer loggedInUser = null;
 
+        LoginSystem login = new LoginSystem();
+        boolean authenticated = false;
+
         System.out.flush();
         askUserRole(customerDB);
 
@@ -68,11 +71,18 @@ public class RunBank {
             if (loggedInUser == null) {
                 System.out.println("Invalid ID number. Please try again.");
             } else {
+                // Initialize the BankUser object with the user's data
+                BankUser bankUser = new BankUser();
+                bankUser.setPassword(loggedInUser.getPassword()); // Assuming Customer has a getPassword method
+
+                while (!authenticated) {
+                    authenticated = login.authenticate(bankUser);
+                }
                 System.out.println("\nWelcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
                 break;
             }
         }
-
+        
         //Start of the program
         while (!exit) {
         // Logs the user in and gets the user's information
@@ -131,6 +141,12 @@ public class RunBank {
         }
     }
 
+    /**
+     * Creates a new account for a customer.
+     *
+     * @param cx the customer to create an account for
+     * @param customerDB the map of customers in the database
+     */
     public static void CreateAccount(Customer cx, Map<String, Customer> customerDB) {
         Scanner sc = new Scanner(System.in);
         boolean exit = false;
@@ -150,7 +166,8 @@ public class RunBank {
             System.out.println("A user with the same name already exists. Please try again.");
             CreateAccount(cx, customerDB);
         }
-        
+        System.out.println("Please enter your password: ");
+        String password = sc.next();
         System.out.println("Please enter your date of birth (D-M-YY): ");
         String DOB = sc.next();
         sc.nextLine();
@@ -167,6 +184,7 @@ public class RunBank {
             BankUser.updateLastNumbersFromCSV("CS 3331 - Bank Users.csv", "CS 3331 - Updated Bank Users.csv");
             BankUser newUser = new BankUser(
                 BankUser.lastUserId,
+                password,
                 firstName,
                 lastName,
                 DOB,

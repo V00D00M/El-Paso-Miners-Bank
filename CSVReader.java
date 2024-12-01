@@ -61,15 +61,23 @@ public class CSVReader {
         return fields;
     }
 
+    /**
+     * Parses a line of the CSV file and creates a Customer object.
+     * 
+     * @param fields
+     * @param columnMapping
+     * @return
+     */
     private Customer parseCustomer(String[] fields, Map<String, Integer> columnMapping) {
         String id = fields[columnMapping.get("Identification Number")];
+        String password = fields[columnMapping.get("Password")];
         String firstName = fields[columnMapping.get("First Name")];
         String lastName = fields[columnMapping.get("Last Name")];
         String dob = fields[columnMapping.get("Date of Birth")];
         String address = fields[columnMapping.get("Address")];
         String phoneNumber = fields[columnMapping.get("Phone Number")];
 
-        Customer customer = new Customer(id, firstName, lastName, address, dob, phoneNumber);
+        Customer customer = new Customer(id, password, firstName, lastName, address, dob, phoneNumber);
 
         // Create and add accounts to the customer
         String checkingAccountNumber = fields[columnMapping.get("Checking Account Number")];

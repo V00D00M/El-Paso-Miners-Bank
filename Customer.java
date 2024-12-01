@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Customer extends Person {
     protected String customerID;
     protected int creditScore;
+    protected String password;
     protected List<Account> account;
 
     /**
@@ -20,8 +21,9 @@ public class Customer extends Person {
      * @param DOB the date of birth of the customer
      * @param phoneNumber the phone number of the customer
      */
-    public Customer(String customerID, String firstName, String lastName, String address, String DOB, String phoneNumber) {
+    public Customer(String customerID, String password, String firstName, String lastName, String address, String DOB, String phoneNumber) {
         super(firstName, lastName, address, DOB, phoneNumber);
+        this.password = password;
         this.customerID = customerID;
         this.creditScore = creditScore;
         this.account = new ArrayList<>();
@@ -63,6 +65,10 @@ public class Customer extends Person {
      */
     public String getCustomerID() {
         return customerID;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     /**

@@ -8,6 +8,7 @@ class BankUser {
     public static int lastSavingsAccountNumber = 0;
 
     private int userID;
+    private String password;
     private String firstName;
     private String lastName;
     private String dob;
@@ -22,12 +23,21 @@ class BankUser {
     private int creditLimit;
     private static final Random random = new Random();
 
+    /**
+     * Default constructor for BankUser.
+     * Initializes the user with default values.
+     * 
+     * @return BankUser
+     * @param none
+     * @throws none
+     */
     public BankUser() {}
 
-    public BankUser(int userID, String firstName, String lastName, String dob,
+    public BankUser(int userID, String password, String firstName, String lastName, String dob,
                     String address, String phoneNumber, int checkingAccountNumber,
                     int savingsAccountNumber, int creditAccountNumber, int creditLimit) {
         this.userID = userID;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
@@ -39,10 +49,36 @@ class BankUser {
         this.creditLimit = generateCreditLimit(creditLimit);
     }
 
+    /**
+     * Constructor for BankUser.
+     * Initializes the user with the given values.
+     * 
+     * @return BankUser
+     * @param userID
+     * @param password
+     * @param firstName
+     * @param lastName
+     * @param dob
+     * @param address
+     * @param phoneNumber
+     * @param creditScore
+     * @param checkingAccountNumber
+     * @param savingsAccountNumber
+     * @param creditAccountNumber
+     * @throws none
+     */
     public int getUserId() {
         return lastUserId;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
+    }
+    
     public String getFirstName() {
         return firstName;
     }
@@ -98,6 +134,13 @@ class BankUser {
         }
     }
 
+    /**
+     * Writes the updated bank users to a new CSV file.
+     * @param users
+     * @param originalFilePath
+     * @param newFilePath
+     * @throws IOException
+     */
     public void toCSV(List<BankUser> users, String originalFilePath, String newFilePath) throws IOException {
         File file = new File(newFilePath);
         String filePathToRead = file.exists() ? newFilePath : originalFilePath;
@@ -159,8 +202,14 @@ class BankUser {
         }
     }
 
+    /**
+     * Converts a Customer object to a BankUser object.
+     * @param customer
+     * @return
+     */
     public static BankUser fromCustomer(Customer customer) {
         int id = Integer.parseInt(customer.getCustomerID()); // Assuming there's a method to get the ID
+        String password = customer.getPassword();
         String firstName = customer.getFirstName();
         String lastName = customer.getLastName();
         String dob = customer.getDOB();
@@ -187,6 +236,7 @@ class BankUser {
         // Create the BankUser object
         BankUser user = new BankUser(
             id,
+            password,
             firstName,
             lastName,
             dob,
@@ -201,6 +251,12 @@ class BankUser {
         return user;
     }
 
+    /**
+     * Updates the last numbers based on the CSV file.
+     * @param originalFilePath
+     * @param newFilePath
+     * @throws IOException
+     */
     public static void updateLastNumbersFromCSV(String originalFilePath, String newFilePath) throws IOException {
         File file = new File(newFilePath);
         String filePathToRead = file.exists() ? newFilePath : originalFilePath;

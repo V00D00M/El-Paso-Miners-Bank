@@ -3,8 +3,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * The TransactionReader class provides functionality to read transaction data from a CSV file
+ * and process transactions.
+ */
 public class TransactionReader {
 
+    /**
+     * Default constructor for TransactionReader.
+     *
+     * @param filePath
+     * @param customerDB
+     */
     public void processTransactions(String filePath, Map<String, Customer> customerDB) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -56,11 +66,26 @@ public class TransactionReader {
         }
     }
 
+    /**
+     * Find a customer in the customerDB by first and last name.
+     * @param firstName
+     * @param lastName
+     * @param customerDB
+     * @return
+     */
     private Customer findCustomer(String firstName, String lastName, Map<String, Customer> customerDB) {
         Customer cx = iterHash(firstName, lastName, customerDB);
         return cx;
     }
     
+    /**
+     * Iterates through the customerDB to find the customer with the given first and last name.
+     * 
+     * @param firstName
+     * @param lastName
+     * @param customerDB
+     * @return
+     */
     private Customer iterHash(String firstName, String lastName, Map<String,Customer> customerDB){
         String fullName = firstName + lastName;
         System.out.println(fullName);
@@ -79,6 +104,12 @@ public class TransactionReader {
         throw new IllegalArgumentException("Customer does not exist in our records");
     }
 
+    /**
+     * Find an account in the customer's account list by account type.
+     * @param customer
+     * @param accountType
+     * @return
+     */
     private Account findAccount(Customer customer, String accountType) {
         Account tempAcc;
         switch(accountType){
@@ -96,6 +127,17 @@ public class TransactionReader {
         throw new IllegalArgumentException("That account type does not exist in our records");
     }
 
+    /**
+     * Handle the pays transaction.
+     * @param fromFirstName
+     * @param fromLastName
+     * @param fromWhere
+     * @param toFirstName
+     * @param toLastName
+     * @param toWhere
+     * @param amount
+     * @param customerDB
+     */
     private void handlePays(String fromFirstName, String fromLastName, String fromWhere, String toFirstName, String toLastName, String toWhere, double amount, Map<String, Customer> customerDB) {
         // Get the users's accounts
         Customer fromCustomer = findCustomer(fromFirstName, fromLastName, customerDB);
@@ -137,6 +179,17 @@ public class TransactionReader {
         System.out.println("Payment of $" + amount + " from " + fromFirstName + " " + fromLastName + " to " + toFirstName + " " + toLastName + " completed successfully.");
     }
 
+    /**
+     * Handle the transfers transaction.
+     * @param fromFirstName
+     * @param fromLastName
+     * @param fromWhere
+     * @param toFirstName
+     * @param toLastName
+     * @param toWhere
+     * @param amount
+     * @param customerDB
+     */
     private void handleTransfers(String fromFirstName, String fromLastName, String fromWhere, String toFirstName, String toLastName, String toWhere, double amount, Map<String, Customer> customerDB) {
         // Get the payer and receiver customers
         Customer fromCustomer = findCustomer(fromFirstName, fromLastName, customerDB);
@@ -178,10 +231,14 @@ public class TransactionReader {
         System.out.println("Payment of $" + amount + " from " + fromFirstName + " " + fromLastName + " to " + toFirstName + " " + toLastName + " completed successfully.");
     }
 
-    private void handleInquires(String fromFirstName, String fromLastName, String fromWhere) {
-        System.out.println(fromFirstName + " " + fromLastName + " From:" + fromWhere);
-    }
-
+    /**
+     * Handle the withdraws transaction.
+     * @param fromFirstName
+     * @param fromLastName
+     * @param fromWhere
+     * @param amount
+     * @param customerDB
+     */
     private void handleWithdraws(String fromFirstName, String fromLastName, String fromWhere, double amount, Map<String, Customer> customerDB) {
         // find the customer
         Customer customer = findCustomer(fromFirstName, fromLastName, customerDB);
@@ -208,6 +265,14 @@ public class TransactionReader {
         System.out.println("Withdrawal of $" + amount + " from " + fromFirstName + " " + fromLastName + " completed successfully.");
     }
 
+    /**
+     * Handle the deposits transaction.
+     * @param toFirstName
+     * @param toLastName
+     * @param toWhere
+     * @param amount
+     * @param customerDB
+     */
     private void handleDeposits(String toFirstName, String toLastName, String toWhere, double amount, Map<String, Customer> customerDB) {
         // find the customer
         Customer customer = findCustomer(toFirstName, toLastName, customerDB);
@@ -228,6 +293,10 @@ public class TransactionReader {
         System.out.println("Deposit of $" + amount + " to " + toFirstName + " " + toLastName + " completed successfully.");
     }
 
+    /**
+     * Display the admin menu.
+     * @param customers
+     */
     public void adminMenu(Map<String, Customer> customers) {
         Scanner sc = new Scanner(System.in);
         boolean exit = false;
@@ -264,6 +333,10 @@ public class TransactionReader {
         // Add your logic here
     }
 
+    /**
+     * Inquire about a specific account.
+     * @param customers
+     */
     private void inquireAboutAccount(Map<String, Customer> customers) {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the name or id of the account holder: ");
