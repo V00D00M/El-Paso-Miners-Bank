@@ -47,8 +47,6 @@ public class RunBank {
     public static void main (String args[]) throws IOException {
         Scanner sc = new Scanner(System.in);
 
-
-        //CSVReader csvReader = new CSVReader();
         CSVReader csvReader = new CSVReader();
         Map<String, Customer> customerDB = csvReader.getCustomers("CS 3331 - Bank Users.csv");
 
@@ -61,6 +59,8 @@ public class RunBank {
 
         System.out.flush();
         askUserRole(customerDB);
+
+        System.out.println("Welcome to the El Paso Miners Bank!");
 
         while (true) {
             System.out.print("Please enter your ID number: ");
@@ -79,22 +79,19 @@ public class RunBank {
                     authenticated = login.authenticate(bankUser);
                 }
                 System.out.println("\nWelcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
+                System.out.println("How can we help you today?\n");
                 break;
             }
         }
-        
+
+        MVCView mvcView = new MVCView();
+        MVCModel mvcModel = new MVCModel(loggedInUser, customerDB, mvcView);
+        MVCController mvcController = new MVCController(mvcView, mvcModel);        
         //Start of the program
         while (!exit) {
         // Logs the user in and gets the user's information
-            System.out.println("Welcome to the El Paso Miners Bank!");
-            System.out.println("How can we help you today?\n");
-            System.out.println("1. Inquire Account Balance");
-            System.out.println("2. Make a Deposit");
-            System.out.println("3. Make a Withdrawal");
-            System.out.println("4. Transfer Money Between Accounts");
-            System.out.println("5. Make a Payment");
-            System.out.println("Exit\n");
-            System.out.print("Enter your choice: ");
+            displayOptions();
+            String logOutput;
             String input = sc.next();
 
             // Ask the user for their choice
@@ -106,27 +103,28 @@ public class RunBank {
                     int choice = Integer.parseInt(input);
                     switch (choice) {
                         case 1: // Inquire Account Balance
-                            System.out.println("Inquire Account Balance");
                             InquireBalance(loggedInUser);
                             break;
                         case 2: // Make a Deposit
-                            System.out.println("Make a Deposit");
-                            DepositMenu(loggedInUser);
+                            logOutput = mvcController.DepositMenu(loggedInUser); //
+                            Logger.getInstance().addToLog(loggedInUser, logOutput);
+                            log(logOutput);
                             writeBalancesToCSV(customerDB);
                             break;
                         case 3: // Make a Withdrawal
-                            System.out.println("Make a Withdrawal");
-                            WithdrawMenu(loggedInUser);
+                            logOutput = mvcController.WithdrawMenu();
+                            Logger.getInstance().addToLog(loggedInUser, logOutput);
+                            log(logOutput);
                             writeBalancesToCSV(customerDB);
                             break;
                         case 4: // Transfer Money Between Accounts
-                            System.out.println("Transfer Money Between Accounts");
                             TransferMenu(loggedInUser, "", customerDB);
                             writeBalancesToCSV(customerDB);
                             break;
                         case 5: // Make a Payment
-                            System.out.println("Make a Payment");
-                            PaymentMenu(loggedInUser);
+                            logOutput = mvcController.PaymentMenu(loggedInUser);
+                            Logger.getInstance().addToLog(loggedInUser, logOutput);
+                            log(logOutput);
                             writeBalancesToCSV(customerDB);
                             break;
                         default:
@@ -139,6 +137,20 @@ public class RunBank {
                 }
             }
         }
+    }
+
+    /**
+     * Displays options that Customer is able to choose from
+     */
+    public static void displayOptions(){
+        System.out.println("How else can we help you today?\n");
+        System.out.println("1. Inquire Account Balance");
+        System.out.println("2. Make a Deposit");
+        System.out.println("3. Make a Withdrawal");
+        System.out.println("4. Transfer Money Between Accounts");
+        System.out.println("5. Make a Payment");
+        System.out.println("Exit\n");
+        System.out.print("Enter your choice: ");
     }
 
     /**
@@ -225,6 +237,7 @@ public class RunBank {
      * @param cx
      */
     public static void InquireBalance(Customer cx) {
+        System.out.println("Inquire Account Balance");
         Scanner sc = new Scanner(System.in);
         String logOutput = "";
         System.out.println("Which account would you like to inquire about?");
@@ -264,303 +277,7 @@ public class RunBank {
         }
     }
 
-    /**
-     * Displays the deposit menu and allows the user to make a deposit to their account.
-     * 
-     * @param cx
-     */
-    public static void DepositMenu(Customer cx) {
-        Scanner sc = new Scanner(System.in);
-        String logOutput = "";
-        boolean validChoice = false;
-    
-        while (!validChoice) {
-            System.out.println("Which account would you like to make a deposit to?");
-            System.out.println("1. Checking Account");
-            System.out.println("2. Savings Account");
-            System.out.println("3. Credit Account");
-            System.out.print("Enter your choice: ");
-            String input = sc.next();
-    
-            try {
-                int choice = Integer.parseInt(input);
-                if (choice < 1 || choice > 3) {
-                    System.out.println("Invalid choice. Please try again.");
-                    continue;
-                }
-    
-                System.out.print("Enter the amount you would like to deposit: $");
-                double amount = sc.nextDouble();
-    
-                switch (choice) {
-                    case 1: // Checking Account
-                        cx.account.get(0).deposit(amount);
-                        System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " deposited $" + amount + " to Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Checking balance is $" + cx.account.get(0).getBalance());
-                        Logger.getInstance().addToLog(cx, logOutput);
-                        log(logOutput);
-                        break;
-                    case 2: // Savings Account
-                        cx.account.get(1).deposit(amount);
-                        System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " deposited $" + amount + " to Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Savings balance is $" + cx.account.get(1).getBalance());
-                        Logger.getInstance().addToLog(cx, logOutput);
-                        log(logOutput);
-                        break;
-                    case 3: // Credit Account
-                        cx.account.get(2).deposit(amount);
-                        System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " deposited $" + amount + " to Credit-" + cx.account.get(2).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Credit balance is $" + cx.account.get(2).getBalance());
-                        Logger.getInstance().addToLog(cx, logOutput);
-                        log(logOutput);
-                        break;
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
-                        break;
-                }
-                validChoice = true;
-            } catch (NumberFormatException e) {
-                System.out.println("\nInvalid choice. Please try again.\n");
-            }
-        }
-    }
-
-    /**
-     * Displays the withdrawal menu and allows the user to make a withdrawal from their account.
-     * 
-     * @param cx
-     */
-    public static void WithdrawMenu(Customer cx) {
-        Scanner sc = new Scanner(System.in);
-        String logOutput = "";
-
-        // Format the balance to two decimal places
-        DecimalFormat df = new DecimalFormat("#.##");
-        
-        try {
-            System.out.println("Which account would you like to make a withdrawal from?");
-            System.out.println("1. Checking Account");
-            System.out.println("2. Savings Account");
-            System.out.print("Enter your choice: ");
-            String input = sc.next();
-            try {
-                int choice = Integer.parseInt(input);
-                System.out.print("Enter the amount you would like to withdraw: $");
-                double amount = sc.nextDouble();
-                switch (choice) {
-                    case 1: // Checking Account
-                        cx.account.get(0).withdraw(amount);
-                        System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + cx.account.get(0).getBalance());
-                        Logger.getInstance().addToLog(cx, logOutput);
-                        log(logOutput);
-                        break;
-                    case 2: // Savings Account
-                        cx.account.get(1).withdraw(amount);
-                        System.out.println("Savings Account Balance: $" + df.format(cx.account.get(1).getBalance()));
-                        logOutput = (cx.firstName + " " + cx.lastName + " withdrew money from Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s balance is $" + df.format(cx.account.get(1).getBalance()));
-                        Logger.getInstance().addToLog(cx, logOutput);
-                        log(logOutput);
-                        break;
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
-                        break;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("\nInvalid choice. Please try again.\n");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("\nInvalid choice. Please try again.\n");
-        }
-    }
-
-    /**
-     * Verifies if the user has enough money in their account to make a payment.
-     * 
-     * @param cx
-     * @param checkSaveAcc
-     * @param amt
-     */
-    public static void verifyPayment(Customer cx, int checkSaveAcc, double amt){
-        // Check if the user has enough money in their account to make the payment
-        double accTotal = cx.account.get(checkSaveAcc).getBalance();
-        if(amt > accTotal){
-            System.out.println("Youre broke and cant pay these bills");
-            return;
-        }
-        else if(cx.account.size() > 2 && (cx.account.get(2).getBalance() + amt) > 0){
-            System.out.println("Sorry thats too much money, we'll make the change for you");
-            cx.account.get(checkSaveAcc).withdraw(cx.account.get(3).getBalance());
-            cx.account.get(3).deposit(cx.account.get(3).getBalance());
-        } else {
-            System.out.println("Approving account payment");
-            System.out.println("Good Job!");
-
-            cx.account.get(checkSaveAcc).withdraw(amt);
-            cx.account.get(2).deposit(amt);
-        }
-    }
-
-    /**
-     * Displays the payment menu and allows the user to make a payment from their account.
-     * 
-     * @param cx
-     */
-    public static void PaymentMenu(Customer cx) {
-        Scanner sc = new Scanner(System.in);
-        String logOutput;
-        try {
-            System.out.println("Which account would you like to make a payment from?");
-            System.out.println("1. Checking Account");
-            System.out.println("2. Savings Account");
-            System.out.print("Enter your choice: ");
-            String input = sc.next();
-            try {
-                int choice = Integer.parseInt(input);
-                System.out.print("Enter the amount you would like to pay: $");
-                double amount = sc.nextDouble();
-                switch (choice) {
-                    case 1: // Checking Account
-                        verifyPayment(cx, 0, amount);
-                        System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
-                        System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " Made payment from Checking-" + cx.account.get(0).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Credit balance is $" + cx.account.get(2).getBalance());
-                        Logger.getInstance().addToLog(cx, logOutput);
-                        log(logOutput);
-                        break;
-                    case 2: // Savings Account
-                        verifyPayment(cx, 1, amount);
-                        System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
-                        System.out.println("Credit Account Balance: $" + cx.account.get(2).getBalance());
-                        logOutput = (cx.firstName + " " + cx.lastName + " Made payment from Savings-" + cx.account.get(1).getAccountNumber() + ". " + cx.firstName + " " + cx.lastName + "'s Credit balance is $" + cx.account.get(2).getBalance());
-                        Logger.getInstance().addToLog(cx, logOutput);
-                        log(logOutput);
-                        break;
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
-                        break;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("\nInvalid choice. Please try again.\n");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("\nInvalid choice. Please try again.\n");
-        }
-    }
-
-    /**
-     * Displays the transfer menu and allows the user to transfer money between accounts.
-     * 
-     * @param cx
-     * @param accountNumber
-     * @param customerDB
-     */
-    public static void TransferMenu(Customer cx, String accountNumber, Map<String, Customer> customerDB) {
-        // Transfer money between accounts
-        Scanner sc = new Scanner(System.in);
-        String logOutput;
-        try {
-            System.out.println("Would you like to transfer money to:");
-            System.out.println("1. Your own account");
-            System.out.println("2. Someone else's account");
-            System.out.print("Enter your choice: ");
-            String transferChoiceInput = sc.next();
-            int transferChoice = Integer.parseInt(transferChoiceInput);
-    
-            System.out.println("Which account would you like to make a payment from?");
-            System.out.println("1. Checking Account");
-            System.out.println("2. Savings Account");
-            System.out.print("Enter your choice: ");
-            String input = sc.next();
-            int choice = Integer.parseInt(input);
-    
-            System.out.print("Enter the amount you would like to pay: $");
-            double amount = sc.nextDouble();
-            if (transferChoice == 1) {
-                // Transfer to own account
-                switch (choice) {
-                    case 1: // Checking Account
-                        cx.account.get(0).withdraw(amount);
-                        cx.account.get(1).deposit(amount);
-                        System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
-                        System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
-                        logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Checking-" + cx.account.get(0).getAccountNumber() + " to Savings-" + cx.account.get(1).getAccountNumber();
-                        Logger.getInstance().addToLog(cx, logOutput);
-                        log(logOutput);
-                        break;
-                    case 2: // Savings Account
-                        cx.account.get(1).withdraw(amount);
-                        cx.account.get(0).deposit(amount);
-                        System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
-                        System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
-                        logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Savings-" + cx.account.get(1).getAccountNumber() + " to Checking-" + cx.account.get(0).getAccountNumber();
-                        Logger.getInstance().addToLog(cx, logOutput);
-                        log(logOutput);
-                        break;
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
-                        break;
-                }
-            } else if (transferChoice == 2) {
-                // Transfer to someone else's account
-                System.out.print("Enter the recipient's account number: ");
-                String recipientAccountNumber = sc.next();
-    
-                boolean recipientFound = false;
-                for (Customer recipient : customerDB.values()) {
-                    for (Account account : recipient.account) {
-                        //System.out.println("Checking account: " + account.getAccountNumber()); // Debugging statement
-                        if (account.getAccountNumber().equals(recipientAccountNumber)) {
-                            recipientFound = true;
-                            switch (choice) {
-                                case 1: // Checking Account
-                                    cx.account.get(0).withdraw(amount);
-                                    account.deposit(amount);
-                                    System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
-                                    logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Checking-" + cx.account.get(0).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account \n" + account.getAccountNumber();
-                                    Logger.getInstance().addToLog(cx, logOutput);
-                                    log(logOutput);
-                                    break;
-                                case 2: // Savings Account
-                                    cx.account.get(1).withdraw(amount);
-                                    account.deposit(amount);
-                                    System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
-                                    logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Savings-" + cx.account.get(1).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account \n" + account.getAccountNumber();
-                                    Logger.getInstance().addToLog(cx, logOutput);
-                                    log(logOutput);
-                                    break;
-                                default:
-                                    System.out.println("Invalid choice. Please try again.");
-                                    break;
-                            }
-                            break;
-                        }
-                    }
-                    if (recipientFound) break;
-                }
-    
-                if (!recipientFound) {
-                    System.out.println("Recipient account number not found. Please try again.");
-                }
-            } else {
-                System.out.println("Invalid choice. Please try again.");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("\nInvalid choice. Please try again.\n");
-        }
-    }
-
-    /**
-     * Displays the admin menu and allows the admin to inquire about a customer's account.
-     * 
-     * @param customers the map of customers in the database
-     */
-    public static void adminMenu(Map<String, Customer> customers) {
-        TransactionReader transactionReader = new TransactionReader();
-        transactionReader.adminMenu(customers);
-    }
-
-    /**
+     /**
      * Asks the user for their role and performs actions based on the role.
      *
      * @param customerDB the map of customers in the database
@@ -602,7 +319,7 @@ public class RunBank {
             askUserRole(customers);
         }
     }
-
+    
     /**
      * Logs a message to a file.
      *
@@ -652,5 +369,131 @@ public class RunBank {
                          cx.account.get(2).getBalance() + "\n");
         }
         writer.close();
+    }
+
+    /**
+     * Displays the admin menu and allows the admin to inquire about a customer's account.
+     * 
+     * @param customers the map of customers in the database
+     */
+    public void adminMenu(Map<String, Customer> customers) {
+        TransactionReader transactionReader = new TransactionReader();
+        transactionReader.adminMenu(customers);
+    }
+
+    /**
+     * Displays the transfer menu and allows the user to transfer money between accounts.
+     * @param cx
+     * @param accountNumber
+     * @param customerDB
+     */
+    public static void TransferMenu(Customer cx, String accountNumber, Map<String, Customer> customerDB) {
+        // Transfer money between accounts
+        System.out.println("Transfer Money Between Accounts");
+        Scanner sc = new Scanner(System.in);
+        String logOutput;
+        try {
+            //Printing Options of transfer to your account or to someone elses account
+            printTransferMenuOptionsToFrom();
+            String transferChoiceInput = sc.next();
+            int transferChoice = Integer.parseInt(transferChoiceInput);
+
+            //Printing options of savings or checkings account Transfer
+            printTransferMenuOptionsSavingCheckingsAccount();
+            String input = sc.next();
+            int choice = Integer.parseInt(input);
+    
+            System.out.print("Enter the amount you would like to pay: $");
+            double amount = sc.nextDouble();
+            if (transferChoice == 1) {
+                // Transfer to own account
+                switch (choice) {
+                    case 1: // Checking Account
+                        cx.account.get(0).withdraw(amount);
+                        cx.account.get(1).deposit(amount);
+                        System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
+                        System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
+                        logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Checking-" + cx.account.get(0).getAccountNumber() + " to Savings-" + cx.account.get(1).getAccountNumber();
+                        Logger.getInstance().addToLog(cx, logOutput);
+                        log(logOutput);
+                        break;
+                    case 2: // Savings Account
+                        cx.account.get(1).withdraw(amount);
+                        cx.account.get(0).deposit(amount);
+                        System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
+                        System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
+                        logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Savings-" + cx.account.get(1).getAccountNumber() + " to Checking-" + cx.account.get(0).getAccountNumber();
+                        Logger.getInstance().addToLog(cx, logOutput);
+                        log(logOutput);
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                }
+            } else if (transferChoice == 2) {
+                // Transfer to someone else's account
+                System.out.print("Enter the recipient's account number: ");
+                String recipientAccountNumber = sc.next();
+    
+                boolean recipientFound = false;
+                for (Customer recipient : customerDB.values()) {
+                    for (Account account : recipient.account) {
+                        if (account.getAccountNumber().equals(recipientAccountNumber)) {
+                            recipientFound = true;
+                            switch (choice) {
+                                case 1: // Checking Account
+                                    cx.account.get(0).withdraw(amount);
+                                    account.deposit(amount);
+                                    System.out.println("Checking Account Balance: $" + cx.account.get(0).getBalance());
+                                    logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Checking-" + cx.account.get(0).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account \n" + account.getAccountNumber();
+                                    Logger.getInstance().addToLog(cx, logOutput);
+                                    log(logOutput);
+                                    break;
+                                case 2: // Savings Account
+                                    cx.account.get(1).withdraw(amount);
+                                    account.deposit(amount);
+                                    System.out.println("Savings Account Balance: $" + cx.account.get(1).getBalance());
+                                    logOutput = cx.firstName + " " + cx.lastName + " transferred $" + amount + " from Savings-" + cx.account.get(1).getAccountNumber() + " to " + recipient.firstName + " " + recipient.lastName + "'s account \n" + account.getAccountNumber();
+                                    Logger.getInstance().addToLog(cx, logOutput);
+                                    log(logOutput);
+                                    break;
+                                default:
+                                    System.out.println("Invalid choice. Please try again.");
+                                    break;
+                            }
+                            break;
+                        }
+                    }
+                    if (recipientFound) break;
+                }
+    
+                if (!recipientFound) {
+                    System.out.println("Recipient account number not found. Please try again.");
+                }
+            } else {
+                System.out.println("Invalid choice. Please try again.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("\nInvalid choice. Please try again.\n");
+        }
+    }
+
+    /**
+     * Handles printing Transfer Menu Options for your account or to someone elses
+     */
+    public static void printTransferMenuOptionsToFrom(){
+        System.out.println("Would you like to transfer money to:");
+        System.out.println("1. Your own account");
+        System.out.println("2. Someone else's account");
+        System.out.print("Enter your choice: ");
+    }
+    /**
+     * Handles Printing Transfer Menu Options for Checking or savings Options
+     */
+    public static void printTransferMenuOptionsSavingCheckingsAccount(){
+        System.out.println("Which account would you like to make a payment from?");
+        System.out.println("1. Checking Account");
+        System.out.println("2. Savings Account");
+        System.out.print("Enter your choice: ");
     }
 }
