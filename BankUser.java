@@ -142,20 +142,35 @@ class BankUser {
      * @throws IOException
      */
     public void toCSV(List<BankUser> users, String originalFilePath, String newFilePath) throws IOException {
-        File file = new File(newFilePath);
-        String filePathToRead = file.exists() ? newFilePath : originalFilePath;
+        File originalFile = new File(originalFilePath);
+        File newFile = new File(newFilePath);
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePathToRead));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(newFilePath, true))) {
+        // Ensure the new file exists
+        if (!newFile.exists()) {
+            newFile.createNewFile();
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(newFile, true))) {
             String line;
-            boolean firstLine = true;
 
-            // checks if the updated bank users file exists
-            if (file.exists()) {
-                for (BankUser user : users) {
+            // If the new file is empty, write the header line
+            if (newFile.length() == 0 && (line = reader.readLine()) != null) {
+                writer.write(line);
                 writer.newLine();
+            }
+
+            // Copy existing users to the new CSV file
+            while ((line = reader.readLine()) != null) {
+                writer.write(line);
+                writer.newLine();
+            }
+
+            // Append the new users to the new CSV file
+            for (BankUser user : users) {
                 writer.write(String.join(",", 
                     String.valueOf(user.getUserId()), 
+                    user.getPassword(),
                     user.getFirstName(), 
                     user.getLastName(), 
                     user.getDOB(), 
@@ -168,36 +183,8 @@ class BankUser {
                     String.valueOf(user.getCreditAccountNumber()), 
                     String.valueOf(user.getCreditLimit()),
                     String.valueOf(-1000.00)
-                    ));
-                }
-            } else {
-                // Copy existing users to the new CSV file
-                while ((line = reader.readLine()) != null) {
-                    if (!firstLine) {
-                        writer.newLine();
-                    }
-                    writer.write(line);
-                    firstLine = false;
-                }
-
-                for (BankUser user : users) {
-                    writer.newLine();
-                    writer.write(String.join(",", 
-                        String.valueOf(user.getUserId()), 
-                        user.getFirstName(), 
-                        user.getLastName(), 
-                        user.getDOB(), 
-                        user.getAddress(), 
-                        user.getPhoneNumber(), 
-                        String.valueOf(user.getCheckingAccountNumber()),
-                        String.valueOf(100),
-                        String.valueOf(user.getSavingsAccountNumber()),
-                        String.valueOf(100),
-                        String.valueOf(user.getCreditAccountNumber()), 
-                        String.valueOf(user.getCreditLimit()),
-                        String.valueOf(-1000.00)
-                    ));
-                }
+                ));
+                writer.newLine();
             }
         }
     }
